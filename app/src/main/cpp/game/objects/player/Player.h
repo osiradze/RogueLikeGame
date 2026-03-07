@@ -7,40 +7,25 @@
 #include "../primitives/Plane.h"
 #include "../shaders/ShadersPaths.h"
 #include "../base/Translation.h"
+#include "PlayerRenderer.h"
 
 class Player: public GameObject {
 public:
     Translation translation = Translation(
-            glm::vec3(0.0),
-            glm::vec3(0.1),
-            45
+            glm::vec3(0.0),glm::vec3(0.1), 0
     );
-
     glm::vec2 velocity {};
     glm::vec2 acceleration {};
 
+    PlayerRenderer renderer = PlayerRenderer([this]() { return translation.getModel(); });
+
+
     void init() override;
-    void onDraw() override;
+    void update() override;
     void destroy() override;
-    void setRatio(float ratio);
+    void setRatio(float ratio) override;
 
 private:
 
-    std::unique_ptr<GLObjectData> data = Plane().getData();
-    ShadersPaths shaders {
-            "shaders/player/player_v.vert",
-            "shaders/player/player_f.frag",
-    };
-    unsigned int  shaderProgram;
-
-    unsigned int vao = 0;
-    unsigned int vbo = 0;
-    unsigned int ebo = 0;
-
-    int u_model;
-
-    void initUniforms();
-    void initData();
-    void initTexture();
 
 };

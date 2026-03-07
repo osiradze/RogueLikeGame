@@ -7,6 +7,8 @@
 class GameObject {
 public:
     virtual void init() {};
-    virtual void onDraw() {};
+    virtual void update() {};
     virtual void destroy() {};
+    virtual void setRatio(float ratio) {};
+
 };

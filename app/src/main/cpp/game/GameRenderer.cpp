@@ -11,7 +11,7 @@ void GameRenderer::onSurfaceCreated() {
 
 void GameRenderer::onDrawFrame() {
     clearBuffers();
-    player->onDraw();
+    player->update();
 }
 
 void GameRenderer::onSurfaceChanged(int width, int height) {
