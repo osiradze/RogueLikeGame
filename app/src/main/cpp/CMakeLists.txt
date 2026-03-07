@@ -26,9 +26,13 @@ project("roguelike")
 # used in the AndroidManifest.xml file.
 add_library(${CMAKE_PROJECT_NAME} SHARED
         GameRendererBridge.cpp
+        ResourcesBridge.cpp
+        assets/AssetManager.cpp
         game/GameGLConfig.cpp
         game/GameRenderer.cpp
         game/objects/player/Player.cpp
+        game/utils/OpenglUtils.cpp
+        game/utils/ShaderUtil.cpp
         # List C/C++ source files with relative paths to this CMakeLists.txt.
         native-lib.cpp)
 

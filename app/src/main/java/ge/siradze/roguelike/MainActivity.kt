@@ -1,5 +1,6 @@
 package ge.siradze.roguelike
 
+import android.content.res.AssetManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -21,55 +22,32 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        gameView = GameView(context = this)
+        setAssetManager(assets)
+
         setContent {
             MaterialTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting(message = stringFromJNI())
                     ComposeGLSurfaceView()
                 }
             }
         }
     }
 
-    /**
-     * A native method that is implemented by the 'roguelike' native library,
-     * which is packaged with this application.
-     */
-    external fun stringFromJNI(): String
-
     companion object {
         // Used to load the 'roguelike' library on application startup.
         init {
             System.loadLibrary("roguelike")
         }
+        private external fun setAssetManager(assetManager: AssetManager)
     }
 
     @Composable
     fun ComposeGLSurfaceView() {
-        AndroidView(
-            factory = { gameView }
-        )
-    }
-
-}
-
-@Composable
-fun Greeting(message: String, modifier: Modifier = Modifier) {
-    Box(
-        modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(text = message)
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MaterialTheme {
-        Greeting(message = "Hello from JNI!")
+        AndroidView(factory = { gameView })
     }
 }
