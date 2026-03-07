@@ -13,18 +13,23 @@ public:
     glm::vec2 velocity {};
     glm::vec2 acceleration {};
 
-    std::unique_ptr<GLObjectData> data = Plane().getData();
-    ShadersPaths shaders {
-            "shaders/vertex.glsl",
-            "shaders/fragment.glsl",
-    };
-    unsigned int  shaderProgram;
-
     void init() override;
     void onDraw() override;
     void destroy() override;
 
 private:
+
+    std::unique_ptr<GLObjectData> data = Plane().getData();
+    ShadersPaths shaders {
+            "shaders/player/player_v.vert",
+            "shaders/player/player_f.frag",
+    };
+    unsigned int  shaderProgram;
+
+    unsigned int vao = 0;
+    unsigned int vbo = 0;
+    unsigned int ebo = 0;
+
     void initUniforms();
     void initData();
     void initTexture();

@@ -6,6 +6,7 @@
 void GameRenderer::onSurfaceCreated() {
     initGLConfig();
     player = std::make_unique<Player>();
+    player->init();
 }
 
 void GameRenderer::onDrawFrame() {
@@ -18,6 +19,6 @@ void GameRenderer::onSurfaceChanged(int width, int height) {
 }
 
 void GameRenderer::onDestroy() {
-
+    player->destroy();
 }
 
