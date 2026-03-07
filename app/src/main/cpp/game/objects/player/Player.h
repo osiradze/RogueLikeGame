@@ -6,16 +6,23 @@
 #include "../base/GLObjectData.h"
 #include "../primitives/Plane.h"
 #include "../shaders/ShadersPaths.h"
+#include "../base/Translation.h"
 
 class Player: public GameObject {
 public:
-    glm::vec2 position {};
+    Translation translation = Translation(
+            glm::vec3(0.0),
+            glm::vec3(0.1),
+            45
+    );
+
     glm::vec2 velocity {};
     glm::vec2 acceleration {};
 
     void init() override;
     void onDraw() override;
     void destroy() override;
+    void setRatio(float ratio);
 
 private:
 
@@ -29,6 +36,8 @@ private:
     unsigned int vao = 0;
     unsigned int vbo = 0;
     unsigned int ebo = 0;
+
+    int u_model;
 
     void initUniforms();
     void initData();

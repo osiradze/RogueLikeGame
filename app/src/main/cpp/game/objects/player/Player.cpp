@@ -19,6 +19,7 @@ void Player::init() {
 
 void Player::onDraw() {
     glUseProgram(shaderProgram);
+    glUniformMatrix4fv(u_model, 1, GL_FALSE, &translation.getModel()[0][0]); // [0][0] because we want pointer of the first number
     glBindVertexArray(vao);
     glDrawElements(GL_TRIANGLES, data->indicesCount, GL_UNSIGNED_INT, nullptr);
     glBindVertexArray(0);
@@ -36,7 +37,7 @@ void Player::destroy() {
 
 
 void Player::initUniforms() {
-
+    u_model = glGetUniformLocation(shaderProgram, "u_model");
 }
 
 void Player::initData() {
@@ -62,4 +63,8 @@ void Player::initData() {
 
 void Player::initTexture() {
 
+}
+
+void Player::setRatio(float ratio) {
+    translation.setRatio(ratio);
 }

@@ -15,7 +15,7 @@ void GameRenderer::onDrawFrame() {
 }
 
 void GameRenderer::onSurfaceChanged(int width, int height) {
-
+    player->setRatio((float) height / (float) width);
 }
 
 void GameRenderer::onDestroy() {
