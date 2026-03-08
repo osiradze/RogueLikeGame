@@ -15,6 +15,9 @@ public:
 
     void onDestroy();
 
+    void onMove(float x, float y);
+    void onUp();
+
 private:
 
     std::unique_ptr<Player> player;

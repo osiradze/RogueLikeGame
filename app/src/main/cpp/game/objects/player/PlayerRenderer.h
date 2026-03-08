@@ -14,6 +14,7 @@ public:
     void init();
     void draw();
     void destroy();
+    void setRatio(float ratio);
 
     explicit PlayerRenderer(std::function<glm::mat4()> getModel): getModel(std::move(getModel)) {}
 private:

@@ -2,6 +2,7 @@ package ge.siradze.roguelike
 
 import android.content.Context
 import android.opengl.GLSurfaceView
+import ge.siradze.roguelike.ui.UIEvent
 
 class GameView(context: Context) : GLSurfaceView(context) {
 
@@ -17,5 +18,7 @@ class GameView(context: Context) : GLSurfaceView(context) {
         super.onDetachedFromWindow()
         gameRenderer.onDestroy()
     }
+
+    fun receiveEvent(event: UIEvent) = gameRenderer.receiveEvent(event)
 
 }

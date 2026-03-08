@@ -35,7 +35,7 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         game/utils/OpenglUtils.cpp
         game/utils/ShaderUtil.cpp
         # List C/C++ source files with relative paths to this CMakeLists.txt.
-        native-lib.cpp)
+)
 
 find_library(gles-lib GLESv3)
 # Specifies libraries CMake should link to your target library. You

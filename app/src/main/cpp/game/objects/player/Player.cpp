@@ -11,8 +11,12 @@ void Player::init() {
 }
 
 void Player::update() {
-    translation.move(velocity * 0.01f);
-    velocity += acceleration;
+    translation.move(velocity * 0.1f);
+    velocity += direction;
+    if(glm::length(velocity) > 0.1f) {
+        velocity = glm::normalize(velocity) * 0.1f;
+    }
+    velocity *= 0.90;
     renderer.draw();
 }
 
@@ -22,4 +26,13 @@ void Player::setRatio(float ratio) {
 
 void Player::destroy() {
     renderer.destroy();
+}
+
+void Player::onMove(float x, float y) {
+    float scale = 0.005;
+    direction = glm::vec2(x * scale , -y * scale);
+}
+
+void Player::onUp() {
+    direction = glm::vec2(0, 0);
 }

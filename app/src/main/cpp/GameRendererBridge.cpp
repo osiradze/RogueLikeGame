@@ -28,3 +28,14 @@ JNIEXPORT void JNICALL
 Java_ge_siradze_roguelike_GameRenderer_onDestroyBridge(JNIEnv *env, jobject thiz) {
     gameRenderer->onDestroy();
 }
+extern "C"
+JNIEXPORT void JNICALL
+Java_ge_siradze_roguelike_GameRenderer_onMove(JNIEnv *env, jobject thiz, jfloat x,
+                                              jfloat y) {
+    gameRenderer->onMove(x, y);
+}
+extern "C"
+JNIEXPORT void JNICALL
+Java_ge_siradze_roguelike_GameRenderer_onUp(JNIEnv *env, jobject thiz) {
+    gameRenderer->onUp();
+}

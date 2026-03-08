@@ -1,0 +1,130 @@
+package ge.siradze.roguelike.ui
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.PointerInputScope
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.dp
+import ge.siradze.roguelike.extentions.normalize
+import ge.siradze.roguelike.extentions.vectorLength
+import ge.siradze.roguelike.extentions.x
+import ge.siradze.roguelike.extentions.y
+import kotlin.math.roundToInt
+
+@Composable
+fun GameUI(
+    modifier: Modifier = Modifier,
+    onEvent: (UIEvent) -> Unit = {}
+) {
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(bottom = 40.dp)
+    ) {
+        DragJoySticks(
+            modifier = Modifier.align(Alignment.BottomStart),
+            onEvent = onEvent
+        )
+        DragJoySticks(
+            modifier = Modifier.align(Alignment.BottomEnd),
+            onEvent = onEvent
+        )
+    }
+}
+
+@Composable
+fun DragJoySticks (
+    modifier: Modifier = Modifier,
+    onEvent: (UIEvent) -> Unit = {}
+) {
+    val offset = remember { mutableStateOf(Offset(0f, 0f)) }
+
+    val pointerInput: suspend PointerInputScope.() -> Unit = {
+        awaitPointerEventScope {
+            val centerX = size.width / 2f
+            val centerY = size.height / 2f
+
+            while (true) {
+                // Wait for down event
+                val event = awaitPointerEvent()
+                val touch = event.changes.firstOrNull() ?: continue
+                val position = touch.position
+                val relativePosition = floatArrayOf(position.x - centerX, position.y - centerY)
+                val normalized = relativePosition.copyOf()
+                with(normalized) {
+                    normalize()
+                }
+                val clamped = if (relativePosition.vectorLength() > 170f) {
+                    floatArrayOf(normalized.x * 170f, normalized.y * 170f)
+                } else {
+                    relativePosition
+                }
+                offset.value = Offset(clamped.x, clamped.y)
+                onEvent(UIEvent.OnMove(normalized))
+
+                onEvent(UIEvent.OnDown)
+                if (touch.pressed.not()) {
+                    offset.value = Offset(0f, 0f)
+                    onEvent(UIEvent.OnUp)
+                }
+
+                // Consume the event
+                event.changes.forEach { change ->
+                    change.consume()
+                }
+            }
+        }
+    }
+
+
+
+    Box(
+        modifier.pointerInput(Unit, pointerInput)
+    ){
+        Box(modifier = Modifier
+            .padding(60.dp)
+            .width(70.dp)
+            .height(70.dp)
+            .border(
+                width = 1.dp,
+                color = Color.White,
+                shape = RoundedCornerShape(35.dp)
+            )
+            .align(Alignment.Center)
+        )
+
+        Box(modifier = Modifier
+            .offset { IntOffset(offset.value.x.roundToInt(), offset.value.y.roundToInt()) }
+            .width(50.dp)
+            .height(50.dp)
+            .clip(CircleShape)
+            .background(Color.White.copy(alpha = 0.5f))
+            .align(Alignment.Center)
+        )
+    }
+}
+
+@Preview
+@Composable
+fun JoySticksPreview() {
+    GameUI()
+}
+

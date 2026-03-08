@@ -26,7 +26,7 @@ public:
     ) : position(position), scale(scale), rotation(glm::vec3(0, 0, rotation)) {}
 
     void move(const glm::vec2 p) {
-        this->position += glm::vec3(p, 0.0);
+        this->position += glm::vec3(p.x * ratio, p.y, 0.0);
         updateModelMatrix();
     }
     void setPosition(const glm::vec3 p) {

@@ -1,6 +1,7 @@
 package ge.siradze.roguelike
 
 import android.opengl.GLSurfaceView
+import ge.siradze.roguelike.ui.UIEvent
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
@@ -22,7 +23,19 @@ class GameRenderer: GLSurfaceView.Renderer {
         onDestroyBridge()
     }
 
- /*   external fun onDragBridge(x: Float, y: Float)
+    fun receiveEvent(event: UIEvent) {
+        when (event) {
+            is UIEvent.OnMove -> {
+                onMove(event.move[0], event.move[1])
+            }
+            UIEvent.OnDown -> Unit
+            UIEvent.OnUp -> {
+                onUp()
+            }
+        }
+    }
+
+ /*
 
     external fun onTouchDownBridge(x: Int, y: Int)
     external fun onTouchBridge(x: Int, y: Int)
@@ -37,4 +50,7 @@ class GameRenderer: GLSurfaceView.Renderer {
     private external fun onSurfaceChangedBridge(width: Int, height: Int)
 
     private external fun onDestroyBridge()
+
+    external fun onMove(x: Float, y: Float)
+    external fun onUp()
 }

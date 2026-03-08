@@ -2,18 +2,19 @@ package ge.siradze.roguelike
 
 import android.content.res.AssetManager
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
+import ge.siradze.roguelike.extentions.x
+import ge.siradze.roguelike.extentions.y
+import ge.siradze.roguelike.ui.GameUI
+import ge.siradze.roguelike.ui.UIEvent
 
 class MainActivity : ComponentActivity() {
 
@@ -33,6 +34,12 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     ComposeGLSurfaceView()
+                    GameUI { event ->
+                        gameView.receiveEvent(event)
+                        if(event is UIEvent.OnMove){
+                            Log.i("MainActivity", "${event.move.x} ${event.move.y}")
+                        }
+                    }
                 }
             }
         }
