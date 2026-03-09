@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "../../utils/OpenglUtils.h"
 #include <GLES3/gl31.h>
+#include "../../time/DeltaTime.h"
 
 
 void Player::init() {
@@ -11,11 +12,8 @@ void Player::init() {
 }
 
 void Player::update() {
-    translation.move(velocity * 0.1f);
-    velocity += direction;
-    if(glm::length(velocity) > 0.1f) {
-        velocity = glm::normalize(velocity) * 0.1f;
-    }
+    translation.move(velocity * DeltaTime::deltaTime);
+    velocity += direction * speed;
     velocity *= 0.90;
     renderer.draw();
 }
@@ -29,8 +27,7 @@ void Player::destroy() {
 }
 
 void Player::onMove(float x, float y) {
-    float scale = 0.005;
-    direction = glm::vec2(x * scale , -y * scale);
+    direction = glm::vec2(x, -y);
 }
 
 void Player::onUp() {

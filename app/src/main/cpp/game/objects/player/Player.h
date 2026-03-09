@@ -16,6 +16,7 @@ public:
     );
     glm::vec2 direction {};
     glm::vec2 velocity {};
+    float speed = 0.07;
 
     PlayerRenderer renderer = PlayerRenderer([this]() { return translation.getModel(); });
 

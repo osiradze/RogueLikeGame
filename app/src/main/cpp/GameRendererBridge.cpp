@@ -3,8 +3,10 @@
 //
 #include <jni.h>
 #include "game/GameRenderer.h"
+#include "game/time/DeltaTime.h"
 
 std::unique_ptr<GameRenderer> gameRenderer;
+
 
 
 extern "C"
@@ -16,6 +18,7 @@ Java_ge_siradze_roguelike_GameRenderer_onSurfaceCreatedBridge(JNIEnv *env, jobje
 extern "C"
 JNIEXPORT void JNICALL
 Java_ge_siradze_roguelike_GameRenderer_onDrawFrameBridge(JNIEnv *env, jobject thiz) {
+    DeltaTime::update();
     gameRenderer->onDrawFrame();
 }
 extern "C"

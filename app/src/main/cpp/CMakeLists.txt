@@ -26,6 +26,7 @@ project("roguelike")
 # used in the AndroidManifest.xml file.
 add_library(${CMAKE_PROJECT_NAME} SHARED
         GameRendererBridge.cpp
+        game/time/DeltaTime.cpp
         ResourcesBridge.cpp
         assets/AssetManager.cpp
         game/GameGLConfig.cpp
