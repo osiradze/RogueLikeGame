@@ -3,6 +3,7 @@
 //
 
 #include "objects/entities/player/Player.h"
+#include "entities/enemy/Enemy.h"
 
 class GameRenderer {
 public:
@@ -21,6 +22,7 @@ public:
 private:
 
     std::unique_ptr<Player> player;
+    std::unique_ptr<Enemy> enemy;
 
 
 

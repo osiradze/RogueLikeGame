@@ -1,10 +1,12 @@
-#include "utils/OpenglUtils.h"
-#include "LineRenderer.h"
+//
+// Created by oto_9 on 11.03.2026.
+//
+
 #include <GLES3/gl31.h>
-//
-// Created by oto_9 on 08.03.2026.
-//
-void LineRenderer::init() {
+#include "Enemy.h"
+#include "utils/OpenglUtils.h"
+
+void Enemy::init() {
     if (!data || !data->vertexData) return;
 
     // init programs
@@ -13,7 +15,7 @@ void LineRenderer::init() {
     initData();
 }
 
-void LineRenderer::initData() {
+void Enemy::initData() {
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
 
@@ -29,33 +31,17 @@ void LineRenderer::initData() {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void LineRenderer::draw() {
+
+
+void Enemy::draw() const {
     glUseProgram(shaderProgram);
-    updateData();
     glBindVertexArray(vao);
-    glDrawArrays(GL_LINES, 0, 2);
+    glDrawArrays(GL_POINTS, 0, enemyCount);
     glBindVertexArray(0);
     glUseProgram(0);
 }
 
-void LineRenderer::updateData() {
-    glm::vec3 playerPos = getPlayerPosition();
-    glm::vec3 aimPos = getAimPosition();
-
-    auto stepX = (aimPos.x - playerPos.x) / 10;
-    auto stepY = (aimPos.y - playerPos.y) / 10;
-
-    data->vertexData[0] = playerPos.x - stepX;
-    data->vertexData[1] = playerPos.y - stepY;
-    data->vertexData[2] = playerPos.x + 2 * stepX;
-    data->vertexData[3] = playerPos.y + 2 * stepY;
-
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, data->vertexDataSize, data->vertexData.get());
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-}
-
-void LineRenderer::destroy() {
+void Enemy::destroy() {
     glBindVertexArray(0);
     glUseProgram(0);
     glDeleteVertexArrays(1, &vao);

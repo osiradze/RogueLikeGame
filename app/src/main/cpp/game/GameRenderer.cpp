@@ -7,11 +7,14 @@ void GameRenderer::onSurfaceCreated() {
     initGLConfig();
     player = std::make_unique<Player>();
     player->init();
+    enemy = std::make_unique<Enemy>();
+    enemy->init();
 }
 
 void GameRenderer::onDrawFrame() {
     clearBuffers();
     player->update();
+    enemy->update();
 }
 
 void GameRenderer::onSurfaceChanged(int width, int height) {
@@ -20,6 +23,7 @@ void GameRenderer::onSurfaceChanged(int width, int height) {
 
 void GameRenderer::onDestroy() {
     player->destroy();
+    enemy->destroy();
 }
 
 void GameRenderer::onMove(Move move) {

@@ -37,7 +37,6 @@ private:
     unsigned int vao = 0;
     unsigned int vbo = 0;
 
-    void initUniforms();
     void initData();
     void updateData();
 
