@@ -15,7 +15,7 @@ public:
 
     void onDestroy();
 
-    void onMove(float x, float y);
+    void onMove(Move move);
     void onUp();
 
 private:

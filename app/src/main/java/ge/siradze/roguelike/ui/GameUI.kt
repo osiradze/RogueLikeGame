@@ -40,10 +40,12 @@ fun GameUI(
             .padding(bottom = 40.dp)
     ) {
         DragJoySticks(
+            cNumber = 0,
             modifier = Modifier.align(Alignment.BottomStart),
             onEvent = onEvent
         )
         DragJoySticks(
+            cNumber = 1,
             modifier = Modifier.align(Alignment.BottomEnd),
             onEvent = onEvent
         )
@@ -52,6 +54,7 @@ fun GameUI(
 
 @Composable
 fun DragJoySticks (
+    cNumber: Int,
     modifier: Modifier = Modifier,
     onEvent: (UIEvent) -> Unit = {}
 ) {
@@ -67,18 +70,17 @@ fun DragJoySticks (
                 val event = awaitPointerEvent()
                 val touch = event.changes.firstOrNull() ?: continue
                 val position = touch.position
+                val maxRadius = 270f
                 val relativePosition = floatArrayOf(position.x - centerX, position.y - centerY)
-                val normalized = relativePosition.copyOf()
-                with(normalized) {
-                    normalize()
-                }
-                val clamped = if (relativePosition.vectorLength() > 170f) {
-                    floatArrayOf(normalized.x * 170f, normalized.y * 170f)
+                val clamped = if (relativePosition.vectorLength() > maxRadius) {
+                    val normalized = relativePosition.copyOf()
+                    with(normalized) { normalize() }
+                    floatArrayOf(normalized.x * maxRadius, normalized.y * maxRadius)
                 } else {
                     relativePosition
                 }
                 offset.value = Offset(clamped.x, clamped.y)
-                onEvent(UIEvent.OnMove(normalized))
+                onEvent(UIEvent.OnMove(floatArrayOf(clamped.x / maxRadius, clamped.y / maxRadius), cNumber))
 
                 onEvent(UIEvent.OnDown)
                 if (touch.pressed.not()) {

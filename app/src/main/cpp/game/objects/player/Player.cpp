@@ -8,28 +8,43 @@
 
 
 void Player::init() {
-    renderer.init();
+    playerRenderer.init();
+    aimRenderer.init();
 }
 
 void Player::update() {
-    translation.move(velocity * DeltaTime::deltaTime);
+    playerTranslation.move(velocity * DeltaTime::deltaTime);
     velocity += direction * speed;
     velocity *= 0.90;
-    renderer.draw();
+    aimTranslation.setPosition(playerTranslation.getPosition() + aimDirection);
+
+    playerRenderer.draw();
+    aimRenderer.draw();
 }
 
 void Player::setRatio(float ratio) {
-    translation.setRatio(ratio);
+    playerTranslation.setRatio(ratio);
+    aimTranslation.setRatio(ratio);
 }
 
 void Player::destroy() {
-    renderer.destroy();
+    playerRenderer.destroy();
+    aimRenderer.destroy();
 }
 
-void Player::onMove(float x, float y) {
-    direction = glm::vec2(x, -y);
+void Player::onMove(Move move) {
+    auto moveVec = glm::vec2(move.x, move.y);
+    if(move.cNumber == 0){
+        direction = glm::vec3(move.x, -move.y, 0);
+    } else if(move.cNumber == 1) {
+        aimDirection = glm::normalize( glm::vec3(move.x, -move.y, 0)) * maxAimDistance;
+        aimDirection.x *= aimTranslation.getRatio();
+    }
+
 }
 
 void Player::onUp() {
-    direction = glm::vec2(0, 0);
+    direction = glm::vec3(0);
+    //aimDirection = glm::vec3(0);
 }
+

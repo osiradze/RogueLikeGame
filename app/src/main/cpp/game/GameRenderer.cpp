@@ -22,8 +22,8 @@ void GameRenderer::onDestroy() {
     player->destroy();
 }
 
-void GameRenderer::onMove(float x, float y) {
-    player->onMove(x, y);
+void GameRenderer::onMove(Move move) {
+    player->onMove(move);
 }
 
 void GameRenderer::onUp() {

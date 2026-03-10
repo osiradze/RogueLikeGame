@@ -27,11 +27,11 @@ public:
 
     void move(const glm::vec2 p) {
         this->position += glm::vec3(p.x * ratio, p.y, 0.0);
-        updateModelMatrix();
+        isDirty = true;
     }
     void setPosition(const glm::vec3 p) {
         this->position = p;
-
+        isDirty = true;
     }
 
     glm::vec3 getPosition() {

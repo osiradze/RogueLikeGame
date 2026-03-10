@@ -1,0 +1,11 @@
+#version 300 es
+precision mediump float;
+
+in vec2 v_uv;
+out vec4 FragColor;
+
+void main() {
+    if (length(v_uv) > 0.5) discard;
+    if (length(v_uv) < 0.4) discard;
+    FragColor = vec4(1.0);
+}

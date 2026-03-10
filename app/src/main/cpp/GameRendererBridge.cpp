@@ -34,8 +34,8 @@ Java_ge_siradze_roguelike_GameRenderer_onDestroyBridge(JNIEnv *env, jobject thiz
 extern "C"
 JNIEXPORT void JNICALL
 Java_ge_siradze_roguelike_GameRenderer_onMove(JNIEnv *env, jobject thiz, jfloat x,
-                                              jfloat y) {
-    gameRenderer->onMove(x, y);
+                                              jfloat y, jint cNumber) {
+    gameRenderer->onMove(Move{x, y, cNumber});
 }
 extern "C"
 JNIEXPORT void JNICALL

@@ -5,16 +5,15 @@
 #pragma once
 
 #include <functional>
-#include "../primitives/Plane.h"
-#include "../shaders/ShadersPaths.h"
-#include "../base/Translation.h"
+#include "../../primitives/Plane.h"
+#include "../../shaders/ShadersPaths.h"
+#include "../../base/Translation.h"
 
 class PlayerRenderer {
 public:
     void init();
     void draw();
     void destroy();
-    void setRatio(float ratio);
 
     explicit PlayerRenderer(std::function<glm::mat4()> getModel): getModel(std::move(getModel)) {}
 private:
@@ -36,6 +35,5 @@ private:
 
     void initUniforms();
     void initData();
-    void initTexture();
     void updateUniforms();
 };

@@ -1,4 +1,4 @@
-#include "../../utils/OpenglUtils.h"
+#include "../../../utils/OpenglUtils.h"
 #include "PlayerRenderer.h"
 #include <GLES3/gl31.h>
 //
@@ -12,7 +12,6 @@ void PlayerRenderer::init() {
                                     shaders.fragmentShader.c_str())) { return; }
     initUniforms();
     initData();
-    initTexture();
 }
 
 void PlayerRenderer::initUniforms() {
@@ -38,10 +37,6 @@ void PlayerRenderer::initData() {
 
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-}
-
-void PlayerRenderer::initTexture() {
-
 }
 
 void PlayerRenderer::draw() {

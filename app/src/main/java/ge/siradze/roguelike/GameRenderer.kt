@@ -26,7 +26,7 @@ class GameRenderer: GLSurfaceView.Renderer {
     fun receiveEvent(event: UIEvent) {
         when (event) {
             is UIEvent.OnMove -> {
-                onMove(event.move[0], event.move[1])
+                onMove(event.move[0], event.move[1], event.cNumber)
             }
             UIEvent.OnDown -> Unit
             UIEvent.OnUp -> {
@@ -51,6 +51,6 @@ class GameRenderer: GLSurfaceView.Renderer {
 
     private external fun onDestroyBridge()
 
-    external fun onMove(x: Float, y: Float)
+    external fun onMove(x: Float, y: Float, cNumber: Int)
     external fun onUp()
 }
