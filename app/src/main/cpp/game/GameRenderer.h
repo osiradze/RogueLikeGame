@@ -2,7 +2,7 @@
 // Created by oto_9 on 06.03.2026.
 //
 
-#include "objects/player/Player.h"
+#include "objects/entities/player/Player.h"
 
 class GameRenderer {
 public:

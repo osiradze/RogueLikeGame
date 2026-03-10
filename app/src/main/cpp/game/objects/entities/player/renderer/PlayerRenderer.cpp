@@ -1,11 +1,10 @@
-#include "../../../../utils/OpenglUtils.h"
-#include "AimRenderer.h"
+#include "utils/OpenglUtils.h"
+#include "PlayerRenderer.h"
 #include <GLES3/gl31.h>
-#include <glm/gtc/type_ptr.hpp>
 //
 // Created by oto_9 on 08.03.2026.
 //
-void AimRenderer::init() {
+void PlayerRenderer::init() {
     if (!data || !data->vertexData || !data->indices) return;
 
     // init programs
@@ -15,11 +14,11 @@ void AimRenderer::init() {
     initData();
 }
 
-void AimRenderer::initUniforms() {
+void PlayerRenderer::initUniforms() {
     u_model = glGetUniformLocation(shaderProgram, "u_model");
 }
 
-void AimRenderer::initData() {
+void PlayerRenderer::initData() {
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
 
@@ -40,20 +39,20 @@ void AimRenderer::initData() {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void AimRenderer::draw() {
+void PlayerRenderer::draw() {
     glUseProgram(shaderProgram);
-    updateData();
+    updateUniforms();
     glBindVertexArray(vao);
     glDrawElements(GL_TRIANGLES, data->indicesCount, GL_UNSIGNED_INT, nullptr);
     glBindVertexArray(0);
     glUseProgram(0);
 }
 
-void AimRenderer::updateData() {
-    glUniformMatrix4fv(u_model, 1, GL_FALSE, glm::value_ptr(getModel()));
+void PlayerRenderer::updateUniforms() {
+    glUniformMatrix4fv(u_model, 1, GL_FALSE, &getModel()[0][0]); // [0][0] because we want pointer of the first number
 }
 
-void AimRenderer::destroy() {
+void PlayerRenderer::destroy() {
     glBindVertexArray(0);
     glUseProgram(0);
     glDeleteVertexArrays(1, &vao);

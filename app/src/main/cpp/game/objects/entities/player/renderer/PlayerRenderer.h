@@ -5,9 +5,9 @@
 #pragma once
 
 #include <functional>
-#include "../../primitives/Plane.h"
-#include "../../shaders/ShadersPaths.h"
-#include "../../base/Translation.h"
+#include "primitives/Plane.h"
+#include "shaders/ShadersPaths.h"
+#include "base/Translation.h"
 
 class PlayerRenderer {
 public:

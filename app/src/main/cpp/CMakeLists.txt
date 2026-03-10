@@ -31,10 +31,10 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         assets/AssetManager.cpp
         game/GameGLConfig.cpp
         game/GameRenderer.cpp
-        game/objects/player/Player.cpp
-        game/objects/player/renderer/PlayerRenderer.cpp
-        game/objects/player/renderer/aim/AimRenderer.cpp
-        game/objects/player/renderer/line/LineRenderer.cpp
+        game/objects/entities/player/Player.cpp
+        game/objects/entities/player/renderer/PlayerRenderer.cpp
+        game/objects/entities/player/renderer/aim/AimRenderer.cpp
+        game/objects/entities/player/renderer/line/LineRenderer.cpp
         game/utils/OpenglUtils.cpp
         game/utils/ShaderUtil.cpp
         # List C/C++ source files with relative paths to this CMakeLists.txt.
@@ -50,6 +50,13 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
         android
         glm
         log
+)
+
+target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
+        ${CMAKE_SOURCE_DIR}
+        ${CMAKE_SOURCE_DIR}/game
+        ${CMAKE_SOURCE_DIR}/game/objects
+        ${CMAKE_SOURCE_DIR}/assets
 )
 
 include(FetchContent)

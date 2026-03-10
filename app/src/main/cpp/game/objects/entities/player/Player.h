@@ -1,16 +1,18 @@
 //
 // Created by oto_9 on 06.03.2026.
 //
+#pragma once
 #include <glm/glm.hpp>
-#include "../GameObject.h"
-#include "../base/GLObjectData.h"
-#include "../primitives/Plane.h"
-#include "../shaders/ShadersPaths.h"
-#include "../base/Translation.h"
+#include "GameObject.h"
+#include "base/GLObjectData.h"
+#include "primitives/Plane.h"
+#include "shaders/ShadersPaths.h"
+#include "base/Translation.h"
 #include "renderer/PlayerRenderer.h"
 #include "renderer/aim/AimRenderer.h"
 #include "renderer/line/LineRenderer.h"
-#include "../../../events/Move.h"
+#include "events/Move.h"
+#include "time/DeltaTime.h"
 
 class Player: public GameObject {
 public:
@@ -23,7 +25,7 @@ public:
     float speed = 0.05;
 
     Translation aimTranslation = Translation(
-            glm::vec3(0.0), glm::vec3(0.02), 0
+            glm::vec3(0.0), glm::vec3(0.01), 0
     );
     glm::vec3 aimDirection{};
     float maxAimDistance = 0.4f;

@@ -3,7 +3,7 @@
 //
 #pragma once
 
-#include "../base/GLObjectData.h"
+#include "base/GLObjectData.h"
 
 class Plane {
 private:

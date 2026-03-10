@@ -2,10 +2,9 @@
 // Created by oto_9 on 06.03.2026.
 //
 #include "Player.h"
-#include "../../utils/OpenglUtils.h"
+#include "utils/OpenglUtils.h"
 #include <GLES3/gl31.h>
-#include "../../time/DeltaTime.h"
-
+#include "time/DeltaTime.h"
 
 void Player::init() {
     playerRenderer.init();
@@ -48,4 +47,3 @@ void Player::onMove(Move move) {
 void Player::onUp() {
     direction = glm::vec3(0);
 }
-

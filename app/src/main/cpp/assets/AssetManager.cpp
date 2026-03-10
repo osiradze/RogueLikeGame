@@ -3,7 +3,7 @@
 //
 
 #include "AssetManager.h"
-#include "../image/stb_image.h"
+#include "image/stb_image.h"
 #include <android/asset_manager.h>
 #include <android/log.h>
 

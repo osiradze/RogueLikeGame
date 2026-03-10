@@ -4,8 +4,8 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "OpenglUtils.h"
-#include "../../assets/AssetManager.h"
-#include "../../image/stb_image.h"
+#include "assets/AssetManager.h"
+#include "image/stb_image.h"
 #include <GLES3/gl31.h>
 #include <android/log.h>
 #include <string>
