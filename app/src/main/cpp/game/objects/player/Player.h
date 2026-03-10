@@ -15,7 +15,7 @@
 class Player: public GameObject {
 public:
     Translation playerTranslation = Translation(
-            glm::vec3(0.0), glm::vec3(0.06), 0
+            glm::vec3(0.0), glm::vec3(0.03), 0
     );
 
     glm::vec3 direction{};

@@ -46,10 +46,13 @@ void LineRenderer::updateData() {
     glm::vec3 playerPos = getPlayerPosition();
     glm::vec3 aimPos = getAimPosition();
 
-    data->vertexData[0] = playerPos.x;
-    data->vertexData[1] = playerPos.y;
-    data->vertexData[2] = aimPos.x;
-    data->vertexData[3] = aimPos.y;
+    auto stepX = (aimPos.x - playerPos.x) / 10;
+    auto stepY = (aimPos.y - playerPos.y) / 10;
+
+    data->vertexData[0] = playerPos.x - stepX;
+    data->vertexData[1] = playerPos.y - stepY;
+    data->vertexData[2] = playerPos.x + 2 * stepX;
+    data->vertexData[3] = playerPos.y + 2 * stepY;
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferSubData(GL_ARRAY_BUFFER, 0, data->vertexDataSize, data->vertexData.get());
