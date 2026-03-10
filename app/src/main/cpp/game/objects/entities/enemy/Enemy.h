@@ -17,7 +17,7 @@ private:
     [[nodiscard]] std::unique_ptr<float[]> getData() const;
 
     int numberOfFloatsPerVertex = 4;
-    int enemyCount = 1000;
+    int enemyCount = 100;
 
 
     std::unique_ptr<GLObjectData> data = std::make_unique<GLObjectData>(
