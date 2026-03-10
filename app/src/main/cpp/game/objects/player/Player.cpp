@@ -10,6 +10,7 @@
 void Player::init() {
     playerRenderer.init();
     aimRenderer.init();
+    lineRenderer.init();
 }
 
 void Player::update() {
@@ -20,6 +21,7 @@ void Player::update() {
 
     playerRenderer.draw();
     aimRenderer.draw();
+    lineRenderer.draw();
 }
 
 void Player::setRatio(float ratio) {
@@ -30,10 +32,10 @@ void Player::setRatio(float ratio) {
 void Player::destroy() {
     playerRenderer.destroy();
     aimRenderer.destroy();
+    lineRenderer.destroy();
 }
 
 void Player::onMove(Move move) {
-    auto moveVec = glm::vec2(move.x, move.y);
     if(move.cNumber == 0){
         direction = glm::vec3(move.x, -move.y, 0);
     } else if(move.cNumber == 1) {
@@ -45,6 +47,5 @@ void Player::onMove(Move move) {
 
 void Player::onUp() {
     direction = glm::vec3(0);
-    //aimDirection = glm::vec3(0);
 }
 

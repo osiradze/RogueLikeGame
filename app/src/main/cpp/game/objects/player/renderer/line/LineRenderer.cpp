@@ -1,0 +1,65 @@
+#include "../../../../utils/OpenglUtils.h"
+#include "LineRenderer.h"
+#include <GLES3/gl31.h>
+//
+// Created by oto_9 on 08.03.2026.
+//
+void LineRenderer::init() {
+    if (!data || !data->vertexData) return;
+
+    // init programs
+    if (!OpenglUtils::createProgram(shaderProgram, shaders.vertexShader.c_str(),
+                                    shaders.fragmentShader.c_str())) { return; }
+    initUniforms();
+    initData();
+}
+
+void LineRenderer::initUniforms() {
+}
+
+void LineRenderer::initData() {
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
+
+    glGenBuffers(1, &vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, data->vertexDataSize, data->vertexData.get(), GL_DYNAMIC_DRAW);
+
+    // vertex attributes
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, data->stride, (void *) 0);
+    glEnableVertexAttribArray(0);
+
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void LineRenderer::draw() {
+    glUseProgram(shaderProgram);
+    updateData();
+    glBindVertexArray(vao);
+    glDrawArrays(GL_LINES, 0, 2);
+    glBindVertexArray(0);
+    glUseProgram(0);
+}
+
+void LineRenderer::updateData() {
+    glm::vec3 playerPos = getPlayerPosition();
+    glm::vec3 aimPos = getAimPosition();
+
+    data->vertexData[0] = playerPos.x;
+    data->vertexData[1] = playerPos.y;
+    data->vertexData[2] = aimPos.x;
+    data->vertexData[3] = aimPos.y;
+
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, data->vertexDataSize, data->vertexData.get());
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void LineRenderer::destroy() {
+    glBindVertexArray(0);
+    glUseProgram(0);
+    glDeleteVertexArrays(1, &vao);
+    glDeleteBuffers(1, &vbo);
+    glDeleteProgram(shaderProgram);
+}

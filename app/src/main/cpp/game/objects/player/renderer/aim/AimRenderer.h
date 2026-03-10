@@ -1,12 +1,12 @@
 //
 // Created by oto_9 on 09.03.2026.
 //
-
+#pragma once
 #include "glm/glm.hpp"
-#include "../../GameObject.h"
-#include "../../base/GLObjectData.h"
-#include "../../primitives/Plane.h"
-#include "../../shaders/ShadersPaths.h"
+#include "../../../GameObject.h"
+#include "../../../base/GLObjectData.h"
+#include "../../../primitives/Plane.h"
+#include "../../../shaders/ShadersPaths.h"
 
 class AimRenderer {
 public:
@@ -34,6 +34,6 @@ private:
 
     void initUniforms();
     void initData();
-    void updateUniforms();
+    void updateData();
 
 };

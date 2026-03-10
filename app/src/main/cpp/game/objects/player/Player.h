@@ -8,7 +8,8 @@
 #include "../shaders/ShadersPaths.h"
 #include "../base/Translation.h"
 #include "renderer/PlayerRenderer.h"
-#include "renderer/AimRenderer.h"
+#include "renderer/aim/AimRenderer.h"
+#include "renderer/line/LineRenderer.h"
 #include "../../../events/Move.h"
 
 class Player: public GameObject {
@@ -30,7 +31,11 @@ public:
 
     PlayerRenderer playerRenderer = PlayerRenderer(
             [this]() { return playerTranslation.getModel(); });
-    AimRenderer aimRenderer = AimRenderer([this]() { return aimTranslation.getModel(); });
+    AimRenderer aimRenderer = AimRenderer(
+            [this]() { return aimTranslation.getModel(); });
+    LineRenderer lineRenderer = LineRenderer(
+            [this]() { return playerTranslation.getPosition(); },
+            [this]() { return aimTranslation.getPosition(); });
 
 
     void init() override;
@@ -44,8 +49,4 @@ public:
     void onMove(Move move);
 
     void onUp();
-
-
-private:
-    void clampAimPosition();
 };

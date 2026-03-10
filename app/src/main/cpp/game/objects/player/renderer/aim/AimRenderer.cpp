@@ -1,6 +1,7 @@
-#include "../../../utils/OpenglUtils.h"
+#include "../../../../utils/OpenglUtils.h"
 #include "AimRenderer.h"
 #include <GLES3/gl31.h>
+#include <glm/gtc/type_ptr.hpp>
 //
 // Created by oto_9 on 08.03.2026.
 //
@@ -41,15 +42,15 @@ void AimRenderer::initData() {
 
 void AimRenderer::draw() {
     glUseProgram(shaderProgram);
-    updateUniforms();
+    updateData();
     glBindVertexArray(vao);
     glDrawElements(GL_TRIANGLES, data->indicesCount, GL_UNSIGNED_INT, nullptr);
     glBindVertexArray(0);
     glUseProgram(0);
 }
 
-void AimRenderer::updateUniforms() {
-    glUniformMatrix4fv(u_model, 1, GL_FALSE, &getModel()[0][0]); // [0][0] because we want pointer of the first number
+void AimRenderer::updateData() {
+    glUniformMatrix4fv(u_model, 1, GL_FALSE, glm::value_ptr(getModel()));
 }
 
 void AimRenderer::destroy() {

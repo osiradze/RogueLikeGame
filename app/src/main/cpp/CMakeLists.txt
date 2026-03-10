@@ -33,7 +33,8 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         game/GameRenderer.cpp
         game/objects/player/Player.cpp
         game/objects/player/renderer/PlayerRenderer.cpp
-        game/objects/player/renderer/AimRenderer.cpp
+        game/objects/player/renderer/aim/AimRenderer.cpp
+        game/objects/player/renderer/line/LineRenderer.cpp
         game/utils/OpenglUtils.cpp
         game/utils/ShaderUtil.cpp
         # List C/C++ source files with relative paths to this CMakeLists.txt.
