@@ -17,11 +17,11 @@ private:
     [[nodiscard]] std::unique_ptr<float[]> getData() const;
 
     int numberOfFloatsPerVertex = 4;
-    int enemyCount = 100;
+    int enemyCount = 10;
 
 
     std::unique_ptr<GLObjectData> data = std::make_unique<GLObjectData>(
-            "enemy", numberOfFloatsPerVertex, enemyCount, getData()
+            "enemy", numberOfFloatsPerVertex, enemyCount * numberOfFloatsPerVertex, getData()
     );
 
     ShadersPaths shaders {
