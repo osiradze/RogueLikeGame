@@ -16,8 +16,9 @@ public:
 
     explicit LineRenderer(
             std::function<glm::vec3()> getPlayerPosition,
-            std::function<glm::vec3()> getAimPosition
-    ):getPlayerPosition(std::move(getPlayerPosition)), getAimPosition(std::move(getAimPosition)){}
+            std::function<glm::vec3()> getAimPosition,
+            std::function<glm::vec3()> getCameraPosition
+    ):getPlayerPosition(std::move(getPlayerPosition)), getAimPosition(std::move(getAimPosition)), getCameraPosition(std::move(getCameraPosition)){}
 
 private:
     std::unique_ptr<GLObjectData> data =  std::make_unique<GLObjectData>(
@@ -32,12 +33,14 @@ private:
 
     std::function<glm::vec3()> getPlayerPosition;
     std::function<glm::vec3()> getAimPosition;
+    std::function<glm::vec3()> getCameraPosition;
 
     unsigned int  shaderProgram {};
     unsigned int vao = 0;
     unsigned int vbo = 0;
 
+    int u_camera = {};
+
     void initData();
     void updateData();
-
 };

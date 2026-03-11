@@ -13,7 +13,10 @@ public:
     void update() override;
     void destroy() override;
 
-    explicit Enemy(std::function<glm::vec3()> getPlayerPosition) : getPlayerPosition(std::move(getPlayerPosition)) {}
+    explicit Enemy(
+            std::function<glm::vec3()> getPlayerPosition,
+            std::function<glm::vec3()> getCameraPosition
+    ) : getPlayerPosition(std::move(getPlayerPosition)), getCameraPosition(std::move(getCameraPosition)) {}
 private:
     [[nodiscard]] std::unique_ptr<float[]> getData() const;
 
@@ -32,11 +35,13 @@ private:
     };
 
     std::function<glm::vec3()> getPlayerPosition;
+    std::function<glm::vec3()> getCameraPosition;
 
     unsigned int shaderProgram {};
     unsigned int computeProgram {};
     unsigned int vao = 0;
     unsigned int vbo = 0;
+    int u_camera = {};
 
     void initData();
     void runCompute() const;

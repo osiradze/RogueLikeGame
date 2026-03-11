@@ -17,6 +17,7 @@ void AimRenderer::init() {
 
 void AimRenderer::initUniforms() {
     u_model = glGetUniformLocation(shaderProgram, "u_model");
+    u_camera = glGetUniformLocation(shaderProgram, "u_camera");
 }
 
 void AimRenderer::initData() {
@@ -51,6 +52,8 @@ void AimRenderer::draw() {
 
 void AimRenderer::updateData() {
     glUniformMatrix4fv(u_model, 1, GL_FALSE, glm::value_ptr(getModel()));
+    auto cam = getCameraPosition();
+    glUniform2f(u_camera, cam.x, cam.y);
 }
 
 void AimRenderer::destroy() {

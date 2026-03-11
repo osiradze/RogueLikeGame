@@ -31,6 +31,7 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         assets/AssetManager.cpp
         game/GameGLConfig.cpp
         game/GameRenderer.cpp
+        game/objects/entities/camera/Camera.cpp
         game/objects/entities/player/Player.cpp
         game/objects/entities/player/renderer/PlayerRenderer.cpp
         game/objects/entities/player/renderer/aim/AimRenderer.cpp

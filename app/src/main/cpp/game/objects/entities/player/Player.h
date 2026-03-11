@@ -31,6 +31,11 @@ public:
 
     glm::vec3 getPosition();
 
+    std::function<glm::vec3()> getPositionFunction() {
+        return [this]() { return getPosition(); };
+    }
+
+    explicit Player(std::function<glm::vec3()> getCameraPosition) : getCameraPosition(std::move(getCameraPosition)) {}
 
 
 private:
@@ -44,15 +49,18 @@ private:
     glm::vec3 aimDirection{};
     float maxAimDistance = 0.4f;
 
+    std::function<glm::vec3()> getCameraPosition;
 
     PlayerRenderer playerRenderer = PlayerRenderer(
-            [this]() { return playerTranslation.getModel(); });
+            [this]() { return playerTranslation.getModel(); },
+            getCameraPosition);
     AimRenderer aimRenderer = AimRenderer(
-            [this]() { return aimTranslation.getModel(); });
+            [this]() { return aimTranslation.getModel(); },
+            getCameraPosition);
     LineRenderer lineRenderer = LineRenderer(
             [this]() { return playerTranslation.getPosition(); },
-            [this]() { return aimTranslation.getPosition(); });
-
+            [this]() { return aimTranslation.getPosition(); },
+            getCameraPosition);
 
     glm::vec3 direction{};
     glm::vec3 velocity{};

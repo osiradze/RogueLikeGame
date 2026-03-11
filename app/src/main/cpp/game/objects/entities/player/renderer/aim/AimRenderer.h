@@ -14,7 +14,8 @@ public:
     void draw();
     void destroy();
 
-    explicit AimRenderer(std::function<glm::mat4()> getModel): getModel(std::move(getModel)) {}
+    explicit AimRenderer(std::function<glm::mat4()> getModel, std::function<glm::vec3()> getCameraPosition)
+        : getModel(std::move(getModel)), getCameraPosition(std::move(getCameraPosition)) {}
 
 private:
     std::unique_ptr<GLObjectData> data = Plane().getData();
@@ -24,6 +25,7 @@ private:
     };
 
     std::function<glm::mat4()> getModel;
+    std::function<glm::vec3()> getCameraPosition;
 
     unsigned int  shaderProgram {};
     unsigned int vao = 0;
@@ -31,9 +33,9 @@ private:
     unsigned int ebo = 0;
 
     int u_model = {};
+    int u_camera = {};
 
     void initUniforms();
     void initData();
     void updateData();
-
 };

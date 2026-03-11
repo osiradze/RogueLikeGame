@@ -9,7 +9,7 @@ std::unique_ptr<float[]> Enemy::getData() const {
     auto buffer = std::make_unique<float[]>(enemyCount * numberOfFloatsPerVertex);
 
     std::mt19937 rng(std::random_device{}());
-    std::uniform_real_distribution<float> dist(-5, 5);
+    std::uniform_real_distribution<float> dist(-2, 2);
 
     for (int i = 0; i < enemyCount; i++) {
         int offset = i * numberOfFloatsPerVertex;

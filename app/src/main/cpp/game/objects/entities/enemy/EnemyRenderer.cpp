@@ -18,6 +18,7 @@ void Enemy::init() {
     // init compute program
     if (!OpenglUtils::createComputeProgram(computeProgram, shaders.computeShader.c_str())) { return; }
 
+    u_camera = glGetUniformLocation(shaderProgram, "u_camera");
     initData();
 }
 
@@ -60,6 +61,8 @@ void Enemy::runCompute() const {
 
 void Enemy::draw() const {
     glUseProgram(shaderProgram);
+    auto cam = getCameraPosition();
+    glUniform2f(u_camera, cam.x, cam.y);
     glBindVertexArray(vao);
     glDrawArrays(GL_POINTS, 0, enemyCount);
     glBindVertexArray(0);
