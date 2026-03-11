@@ -5,13 +5,19 @@
 #include <GLES3/gl31.h>
 #include "Enemy.h"
 #include "utils/OpenglUtils.h"
+#include "utils/ShaderUtil.h"
+#include "time/DeltaTime.h"
 
 void Enemy::init() {
     if (!data || !data->vertexData) return;
 
-    // init programs
+    // init render program
     if (!OpenglUtils::createProgram(shaderProgram, shaders.vertexShader.c_str(),
                                     shaders.fragmentShader.c_str())) { return; }
+
+    // init compute program
+    if (!OpenglUtils::createComputeProgram(computeProgram, shaders.computeShader.c_str())) { return; }
+
     initData();
 }
 
@@ -23,7 +29,7 @@ void Enemy::initData() {
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, data->vertexDataSize, data->vertexData.get(), GL_DYNAMIC_DRAW);
 
-    // vertex attributes
+    // vertex attributes: position (x, y) with stride of 4 floats
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, data->stride, (void *) 0);
     glEnableVertexAttribArray(0);
 
@@ -31,7 +37,26 @@ void Enemy::initData() {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
+void Enemy::runCompute() const {
+    ShaderUtil::computeShader(
+        computeProgram,
+        [this]() {
+            auto playerPosition = getPlayerPosition();
 
+            glUniform2f(
+                glGetUniformLocation(computeProgram, "u_player_position"),
+                playerPosition.x, playerPosition.y
+            );
+            glUniform1f(
+                glGetUniformLocation(computeProgram, "u_delta_time"),
+                DeltaTime::deltaTime
+            );
+        },
+        const_cast<unsigned int*>(&vbo),
+        1,
+        enemyCount, 1, 1
+    );
+}
 
 void Enemy::draw() const {
     glUseProgram(shaderProgram);
@@ -47,4 +72,7 @@ void Enemy::destroy() {
     glDeleteVertexArrays(1, &vao);
     glDeleteBuffers(1, &vbo);
     glDeleteProgram(shaderProgram);
+    glDeleteProgram(computeProgram);
 }
+
+

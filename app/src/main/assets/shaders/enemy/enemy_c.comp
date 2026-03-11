@@ -1,0 +1,38 @@
+#version 310 es
+layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+
+layout (std430, binding = 0) buffer InputOutputBuffer {
+    float data[];
+} inputOutput;
+
+uniform vec2 u_player_position;
+uniform float u_delta_time;
+
+const float CHASE_DISTANCE = 0.5;
+const float ENEMY_SPEED = 0.3;
+
+void main() {
+    uint id = gl_WorkGroupID.x;
+    uint index = id * 4u;
+
+    vec2 enemy_position = vec2(inputOutput.data[index], inputOutput.data[index + 1u]);
+    vec2 velocity = vec2(inputOutput.data[index + 2u], inputOutput.data[index + 3u]);
+
+    vec2 toPlayer = u_player_position - enemy_position;
+    float dist = length(toPlayer);
+
+    if (dist < CHASE_DISTANCE && dist > 0.0001) {
+        vec2 dir = toPlayer / dist;
+        velocity = dir * ENEMY_SPEED;
+    } else {
+        velocity = vec2(0.0);
+    }
+
+    enemy_position += velocity * u_delta_time;
+
+    inputOutput.data[index] = enemy_position.x;
+    inputOutput.data[index + 1u] = enemy_position.y;
+    inputOutput.data[index + 2u] = velocity.x;
+    inputOutput.data[index + 3u] = velocity.y;
+}
+

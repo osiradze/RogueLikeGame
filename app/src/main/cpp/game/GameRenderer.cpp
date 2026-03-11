@@ -7,7 +7,7 @@ void GameRenderer::onSurfaceCreated() {
     initGLConfig();
     player = std::make_unique<Player>();
     player->init();
-    enemy = std::make_unique<Enemy>();
+    enemy = std::make_unique<Enemy>([this]() { return player->getPosition(); });
     enemy->init();
 }
 

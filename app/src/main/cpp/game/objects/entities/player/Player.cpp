@@ -47,3 +47,8 @@ void Player::onMove(Move move) {
 void Player::onUp() {
     direction = glm::vec3(0);
 }
+
+glm::vec3 Player::getPosition() {
+    return playerTranslation.getPosition();
+}
+

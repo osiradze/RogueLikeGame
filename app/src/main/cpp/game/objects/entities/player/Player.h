@@ -16,13 +16,27 @@
 
 class Player: public GameObject {
 public:
+
+    void init() override;
+
+    void update() override;
+
+    void destroy() override;
+
+    void setRatio(float ratio) override;
+
+    void onMove(Move move);
+
+    void onUp();
+
+    glm::vec3 getPosition();
+
+
+
+private:
     Translation playerTranslation = Translation(
             glm::vec3(0.0), glm::vec3(0.03), 0
     );
-
-    glm::vec3 direction{};
-    glm::vec3 velocity{};
-    float speed = 0.05;
 
     Translation aimTranslation = Translation(
             glm::vec3(0.0), glm::vec3(0.01), 0
@@ -40,15 +54,7 @@ public:
             [this]() { return aimTranslation.getPosition(); });
 
 
-    void init() override;
-
-    void update() override;
-
-    void destroy() override;
-
-    void setRatio(float ratio) override;
-
-    void onMove(Move move);
-
-    void onUp();
+    glm::vec3 direction{};
+    glm::vec3 velocity{};
+    float speed = 0.05;
 };
