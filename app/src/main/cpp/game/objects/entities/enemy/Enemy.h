@@ -12,6 +12,7 @@ public:
     void init() override;
     void update() override;
     void destroy() override;
+    void setScreenWidth(int width) { screenWidth = width; }
 
     explicit Enemy(
             std::function<glm::vec3()> getPlayerPosition,
@@ -20,9 +21,10 @@ public:
 private:
     [[nodiscard]] std::unique_ptr<float[]> getData() const;
 
-    int numberOfFloatsPerVertex = 4;
-    int enemyCount = 100;
-
+    int numberOfFloatsPerVertex = 5;
+    int enemyCount = 1000;
+    float radius = 0.02f;
+    int screenWidth = 1;
 
     std::unique_ptr<GLObjectData> data = std::make_unique<GLObjectData>(
             "enemy", numberOfFloatsPerVertex, enemyCount * numberOfFloatsPerVertex, getData()
@@ -42,6 +44,7 @@ private:
     unsigned int vao = 0;
     unsigned int vbo = 0;
     int u_camera = {};
+    int u_point_size = {};
 
     void initData();
     void runCompute() const;

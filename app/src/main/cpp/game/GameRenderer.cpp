@@ -16,13 +16,14 @@ void GameRenderer::onSurfaceCreated() {
 
 void GameRenderer::onDrawFrame() {
     clearBuffers();
-    player->update();
     enemy->update();
+    player->update();
     camera->update();
 }
 
 void GameRenderer::onSurfaceChanged(int width, int height) {
     player->setRatio((float) height / (float) width);
+    enemy->setScreenWidth(width);
 }
 
 void GameRenderer::onDestroy() {

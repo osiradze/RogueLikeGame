@@ -7,27 +7,45 @@ layout (std430, binding = 0) buffer InputOutputBuffer {
 
 uniform vec2 u_player_position;
 uniform float u_delta_time;
+uniform uint u_enemy_count;
+uniform float u_collision_radius;
+uniform uint u_floats_per_vertex;
 
-const float CHASE_DISTANCE = 0.5;
-const float ENEMY_SPEED = 0.3;
+const float ENEMY_SPEED = 0.6;
 
 void main() {
+
     uint id = gl_WorkGroupID.x;
-    uint index = id * 4u;
+    uint index = id * u_floats_per_vertex;
 
     vec2 enemy_position = vec2(inputOutput.data[index], inputOutput.data[index + 1u]);
     vec2 velocity = vec2(inputOutput.data[index + 2u], inputOutput.data[index + 3u]);
 
+    // Chase player
     vec2 toPlayer = u_player_position - enemy_position;
     float dist = length(toPlayer);
-
-    vec2 dir = toPlayer / dist;
-    velocity = dir * ENEMY_SPEED;
-   /** if (dist < CHASE_DISTANCE && dist > 0.0001) {
-
+    vec2 dir = (toPlayer / dist) * ENEMY_SPEED;
+    if(dist > 0.3 && inputOutput.data[index + 4u] > 0.5) {
+        velocity = dir;
+    } else if(dist < 0.3) {
+        inputOutput.data[index + 4u] = 0.0;
+        velocity = -dir;
     } else {
         velocity = vec2(0.0);
-    }*/
+    }
+
+
+    // Separate from other enemies by pushing position
+    for (uint i = 0u; i < u_enemy_count; i++) {
+        if (i == id) continue;
+        uint otherIndex = i * u_floats_per_vertex;
+        vec2 other_position = vec2(inputOutput.data[otherIndex], inputOutput.data[otherIndex + 1u]);
+        vec2 diff = enemy_position - other_position;
+        float d = length(diff);
+        if (d < u_collision_radius && d > 0.0001) {
+            enemy_position += ((diff / d) * (u_collision_radius - d));
+        }
+    }
 
     enemy_position += velocity * u_delta_time;
 
@@ -35,5 +53,10 @@ void main() {
     inputOutput.data[index + 1u] = enemy_position.y;
     inputOutput.data[index + 2u] = velocity.x;
     inputOutput.data[index + 3u] = velocity.y;
+
+
+
+
+
 }
 
