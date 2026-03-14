@@ -21,7 +21,11 @@ public:
 private:
     [[nodiscard]] std::unique_ptr<float[]> getData() const;
 
-    int numberOfFloatsPerVertex = 5;
+    // position 2 - x,y
+    // velocity 2 - vx vy
+    // chasing - 1
+    // in area
+    int numberOfFloatsPerVertex = 6;
     int enemyCount = 40000;
     float radius = 0.01f;
     int screenWidth = 1;

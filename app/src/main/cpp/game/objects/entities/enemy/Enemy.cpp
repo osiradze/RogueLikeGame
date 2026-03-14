@@ -18,6 +18,7 @@ std::unique_ptr<float[]> Enemy::getData() const {
         buffer[offset + 2] = 0.0f;      // vx
         buffer[offset + 3] = 0.0f;      // vy
         buffer[offset + 4] = 1.0f;      // stopper
+        buffer[offset + 5] = 0.0f;      // stopper
     }
 
     return buffer;
