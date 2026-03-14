@@ -21,20 +21,8 @@ void main() {
     vec2 enemy_position = vec2(inputOutput.data[index], inputOutput.data[index + 1u]);
     vec2 velocity = vec2(inputOutput.data[index + 2u], inputOutput.data[index + 3u]);
 
-    // Chase player
-    vec2 toPlayer = u_player_position - enemy_position;
-    float dist = length(toPlayer);
-    vec2 dir = (toPlayer / dist) * ENEMY_SPEED;
-    if(dist > 0.3 && inputOutput.data[index + 4u] > 0.5) {
-        velocity = dir;
-    } else if(dist < 0.3) {
-        inputOutput.data[index + 4u] = 0.0;
-        velocity = -dir;
-    } else {
-        velocity = vec2(0.0);
-    }
 
-
+    bool isColliding = false;
     // Separate from other enemies by pushing position
     for (uint i = 0u; i < u_enemy_count; i++) {
         if (i == id) continue;
@@ -43,9 +31,30 @@ void main() {
         vec2 diff = enemy_position - other_position;
         float d = length(diff);
         if (d < u_collision_radius && d > 0.0001) {
+            velocity = vec2(0.0);
             enemy_position += ((diff / d) * (u_collision_radius - d));
+            isColliding = true;
         }
     }
+
+    //if(!isColliding) {
+        // Chase player
+        vec2 toPlayer = u_player_position - enemy_position;
+        float dist = length(toPlayer);
+        vec2 dir = (toPlayer / dist) * ENEMY_SPEED;
+        if(dist > 0.3 && inputOutput.data[index + 4u] > 0.5 && !isColliding) {
+            velocity = dir;
+        } else if(dist < 0.3) {
+            inputOutput.data[index + 4u] = 0.0;
+            velocity = -dir;
+        } else {
+            velocity = vec2(0.0);
+        }
+
+   // }
+
+
+
 
     enemy_position += velocity * u_delta_time;
 
