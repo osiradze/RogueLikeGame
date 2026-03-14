@@ -88,17 +88,17 @@ void main() {
 
     //calculate area
     vec4 bounds = vec4(-10.0, -10.0, 10.0, 10.0);
-    uint divideNumber = 10u;
-    float newQid = 0.0;
-
-
+    uint divideNumber = 8u;
+    int newQid = 0;
+    int multiplier = 1;
 
     for(uint i = 0u; i < divideNumber; i++) {
         Quadrant quad = getQuadrant(enemy_position, bounds);
         bounds = quad.bounds;
-        newQid += float(quad.id) * pow(10.0, float(i));
+        newQid += int(quad.id) * multiplier;
+        multiplier *= 10;
     }
-    inputOutput.data[index + 5u] = newQid;
+    inputOutput.data[index + 5u] = float(newQid);
 
 }
 
