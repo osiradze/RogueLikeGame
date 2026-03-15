@@ -26,7 +26,7 @@ private:
     // chasing - 1
     // in area
     int numberOfFloatsPerVertex = 6;
-    int enemyCount = 40000;
+    int enemyCount = 4000;
     float radius = 0.01f;
     int screenWidth = 1;
 
@@ -43,14 +43,18 @@ private:
     std::function<glm::vec3()> getPlayerPosition;
     std::function<glm::vec3()> getCameraPosition;
 
+    static constexpr int DEBUG_BUFFER_SIZE = 4;
+
     unsigned int shaderProgram {};
     unsigned int computeProgram {};
     unsigned int vao = 0;
     unsigned int vbo = 0;
+    unsigned int debugSSBO = 0;
     int u_camera = {};
     int u_point_size = {};
 
     void initData();
-    void runCompute() const;
+    void runCompute();
+    void readDebugBuffer() const;
     void draw() const;
 };

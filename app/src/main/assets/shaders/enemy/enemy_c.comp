@@ -1,9 +1,15 @@
 #version 310 es
+precision highp float;
+
 layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
 
 layout (std430, binding = 0) buffer InputOutputBuffer {
     float data[];
 } inputOutput;
+
+layout (std430, binding = 1) buffer DebugBuffer {
+    float debug[];
+} debugOutput;
 
 uniform vec2 u_player_position;
 uniform float u_delta_time;
@@ -14,25 +20,29 @@ uniform uint u_floats_per_vertex;
 const float ENEMY_SPEED = 0.6;
 
 struct Quadrant {
-    uint id;
+    float id;
     vec4 bounds;
 };
 
 
 Quadrant getQuadrant(vec2 position, vec4 bounds) {
-    float halfLengthX =  (bounds.z - bounds.x) / 2.0;
-    float halfLengthY =  (bounds.w - bounds.y) / 2.0;
-    if(position.x > bounds.x + halfLengthX) {
-        if(position.y > bounds.y + halfLengthY) {
-            return Quadrant(3u, vec4(bounds.x + halfLengthX, bounds.y + halfLengthY, bounds.z, bounds.w));
+    float halfLengthX = (bounds.z - bounds.x) * 0.5;
+    float halfLengthY = (bounds.w - bounds.y) * 0.5;
+
+    float midX = bounds.x + halfLengthX;
+    float midY = bounds.y + halfLengthY;
+
+    if (position.x > midX) {
+        if (position.y > midY) {
+            return Quadrant(3.0, vec4(midX, midY, bounds.z, bounds.w));
         } else {
-            return Quadrant(1u, vec4(bounds.x + halfLengthX, bounds.y, bounds.z, bounds.y + halfLengthY));
+            return Quadrant(1.0, vec4(midX, bounds.y, bounds.z, midY));
         }
     } else {
-        if(position.y > bounds.y + halfLengthY) {
-            return Quadrant(2u, vec4(bounds.x, bounds.y + halfLengthY, bounds.x + halfLengthX, bounds.w));
+        if (position.y > midY) {
+            return Quadrant(2.0, vec4(bounds.x, midY, midX, bounds.w));
         } else {
-            return Quadrant(0u, vec4(bounds.x, bounds.y, bounds.x + halfLengthX, bounds.y + halfLengthY));
+            return Quadrant(0.0, vec4(bounds.x, bounds.y, midX, midY));
         }
     }
 }
@@ -47,20 +57,22 @@ void main() {
     vec2 velocity = vec2(inputOutput.data[index + 2u], inputOutput.data[index + 3u]);
     float qId = inputOutput.data[index + 5u];
 
-
     bool isColliding = false;
     // Separate from other enemies by pushing position
     for (uint i = 0u; i < u_enemy_count; i++) {
-        float otherQId = inputOutput.data[i * u_floats_per_vertex + 5u];
-        if (i == id || otherQId != qId) continue;
+        if (i == id) continue;
         uint otherIndex = i * u_floats_per_vertex;
+        float otherQId = inputOutput.data[otherIndex + 5u];
+        if (otherQId != qId) {
+            continue;
+        }
         vec2 other_position = vec2(inputOutput.data[otherIndex], inputOutput.data[otherIndex + 1u]);
         vec2 diff = enemy_position - other_position;
         float d = length(diff);
         if (d < u_collision_radius && d > 0.0001) {
-            velocity = vec2(0.0);
-            enemy_position += ((diff / d) * (u_collision_radius - d)) * 0.5;
-            isColliding = true;
+            float overlap = (u_collision_radius - d) * 0.5;
+            enemy_position += (diff / d) * overlap;
+            //isColliding = true;
         }
     }
 
@@ -88,17 +100,19 @@ void main() {
 
     //calculate area
     vec4 bounds = vec4(-10.0, -10.0, 10.0, 10.0);
-    uint divideNumber = 8u;
-    int newQid = 0;
-    int multiplier = 1;
+    int divideNumber = 5;
+    float newQid = 0.0;
+    uint multiplier = 1u;
 
-    for(uint i = 0u; i < divideNumber; i++) {
+    for(int i = 0; i < divideNumber; i++) {
         Quadrant quad = getQuadrant(enemy_position, bounds);
         bounds = quad.bounds;
-        newQid += int(quad.id) * multiplier;
-        multiplier *= 10;
+        newQid += quad.id * float(multiplier);
+        multiplier *= 10u;
     }
-    inputOutput.data[index + 5u] = float(newQid);
+    inputOutput.data[index + 5u] = newQid;
+
+
 
 }
 

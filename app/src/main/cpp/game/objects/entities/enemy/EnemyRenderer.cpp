@@ -3,10 +3,14 @@
 //
 
 #include <GLES3/gl31.h>
+#include <android/log.h>
 #include "Enemy.h"
 #include "utils/OpenglUtils.h"
 #include "utils/ShaderUtil.h"
 #include "time/DeltaTime.h"
+
+#define LOG_TAG "EnemyDebug"
+#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 
 void Enemy::init() {
     if (!data || !data->vertexData) return;
@@ -37,9 +41,17 @@ void Enemy::initData() {
 
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    // Create debug SSBO (4 floats)
+    glGenBuffers(1, &debugSSBO);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, debugSSBO);
+    float debugInit[DEBUG_BUFFER_SIZE] = {0.0f};
+    glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(debugInit), debugInit, GL_DYNAMIC_READ);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 }
 
-void Enemy::runCompute() const {
+void Enemy::runCompute() {
+    unsigned int ssbos[] = { vbo, debugSSBO };
     ShaderUtil::computeShader(
         computeProgram,
         [this]() {
@@ -66,10 +78,26 @@ void Enemy::runCompute() const {
                 static_cast<unsigned int>(numberOfFloatsPerVertex)
             );
         },
-        const_cast<unsigned int*>(&vbo),
-        1,
+        ssbos,
+        2,
         enemyCount, 1, 1
     );
+
+    readDebugBuffer();
+}
+
+void Enemy::readDebugBuffer() const {
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, debugSSBO);
+    auto* ptr = (float*)glMapBufferRange(
+        GL_SHADER_STORAGE_BUFFER, 0,
+        DEBUG_BUFFER_SIZE * sizeof(float),
+        GL_MAP_READ_BIT
+    );
+    if (ptr) {
+        LOGD("Debug: [%.4f, %.4f, %.4f, %.4f]", ptr[0], ptr[1], ptr[2], ptr[3]);
+        glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+    }
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 }
 
 void Enemy::draw() const {
@@ -89,6 +117,7 @@ void Enemy::destroy() {
     glUseProgram(0);
     glDeleteVertexArrays(1, &vao);
     glDeleteBuffers(1, &vbo);
+    glDeleteBuffers(1, &debugSSBO);
     glDeleteProgram(shaderProgram);
     glDeleteProgram(computeProgram);
 }
