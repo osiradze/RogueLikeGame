@@ -26,7 +26,7 @@ private:
     // chasing - 1
     // in area
     int numberOfFloatsPerVertex = 6;
-    int enemyCount = 4000;
+    int enemyCount = 1000;
     float radius = 0.01f;
     int screenWidth = 1;
 

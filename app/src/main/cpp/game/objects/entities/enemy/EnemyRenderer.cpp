@@ -83,7 +83,7 @@ void Enemy::runCompute() {
         enemyCount, 1, 1
     );
 
-    readDebugBuffer();
+    //readDebugBuffer();
 }
 
 void Enemy::readDebugBuffer() const {
