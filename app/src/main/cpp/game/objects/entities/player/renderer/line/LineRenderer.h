@@ -7,6 +7,7 @@
 #include "base/GLObjectData.h"
 #include "primitives/Plane.h"
 #include "shaders/ShadersPaths.h"
+#include "base/UniformLocations.h"
 
 class LineRenderer {
 public:
@@ -39,7 +40,7 @@ private:
     unsigned int vao = 0;
     unsigned int vbo = 0;
 
-    int u_camera = {};
+    Uniforms uniforms;
 
     void initData();
     void updateData();

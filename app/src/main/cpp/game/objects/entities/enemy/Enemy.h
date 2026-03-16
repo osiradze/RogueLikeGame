@@ -3,6 +3,7 @@
 //
 #pragma once
 #include "base/GLObjectData.h"
+#include "base/UniformLocations.h"
 #include "GameObject.h"
 #include "shaders/ShadersPaths.h"
 #include <glm/glm.hpp>
@@ -50,9 +51,11 @@ private:
     unsigned int vao = 0;
     unsigned int vbo = 0;
     unsigned int debugSSBO = 0;
-    int u_camera = {};
-    int u_point_size = {};
 
+    Uniforms renderUniforms;
+    Uniforms computeUniforms;
+
+    void initUniforms();
     void initData();
     void runCompute();
     void readDebugBuffer() const;

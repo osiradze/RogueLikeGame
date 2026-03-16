@@ -15,8 +15,8 @@ void PlayerRenderer::init() {
 }
 
 void PlayerRenderer::initUniforms() {
-    u_model = glGetUniformLocation(shaderProgram, "u_model");
-    u_camera = glGetUniformLocation(shaderProgram, "u_camera");
+    uniforms.u_model  = glGetUniformLocation(shaderProgram, "u_model");
+    uniforms.u_camera = glGetUniformLocation(shaderProgram, "u_camera");
 }
 
 void PlayerRenderer::initData() {
@@ -50,9 +50,9 @@ void PlayerRenderer::draw() {
 }
 
 void PlayerRenderer::updateUniforms() {
-    glUniformMatrix4fv(u_model, 1, GL_FALSE, &getModel()[0][0]);
+    glUniformMatrix4fv(uniforms.u_model, 1, GL_FALSE, &getModel()[0][0]);
     auto cam = getCameraPosition();
-    glUniform2f(u_camera, cam.x, cam.y);
+    glUniform2f(uniforms.u_camera, cam.x, cam.y);
 }
 
 void PlayerRenderer::destroy() {

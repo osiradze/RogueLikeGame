@@ -22,9 +22,21 @@ void Enemy::init() {
     // init compute program
     if (!OpenglUtils::createComputeProgram(computeProgram, shaders.computeShader.c_str())) { return; }
 
-    u_camera = glGetUniformLocation(shaderProgram, "u_camera");
-    u_point_size = glGetUniformLocation(shaderProgram, "u_point_size");
+    initUniforms();
     initData();
+}
+
+void Enemy::initUniforms() {
+    // render uniforms
+    renderUniforms.u_camera     = glGetUniformLocation(shaderProgram, "u_camera");
+    renderUniforms.u_point_size = glGetUniformLocation(shaderProgram, "u_point_size");
+
+    // compute uniforms
+    computeUniforms.u_player_position   = glGetUniformLocation(computeProgram, "u_player_position");
+    computeUniforms.u_delta_time        = glGetUniformLocation(computeProgram, "u_delta_time");
+    computeUniforms.u_enemy_count       = glGetUniformLocation(computeProgram, "u_enemy_count");
+    computeUniforms.u_collision_radius  = glGetUniformLocation(computeProgram, "u_collision_radius");
+    computeUniforms.u_floats_per_vertex = glGetUniformLocation(computeProgram, "u_floats_per_vertex");
 }
 
 void Enemy::initData() {
@@ -57,26 +69,11 @@ void Enemy::runCompute() {
         [this]() {
             auto playerPosition = getPlayerPosition();
 
-            glUniform2f(
-                glGetUniformLocation(computeProgram, "u_player_position"),
-                playerPosition.x, playerPosition.y
-            );
-            glUniform1f(
-                glGetUniformLocation(computeProgram, "u_delta_time"),
-                DeltaTime::deltaTime
-            );
-            glUniform1ui(
-                glGetUniformLocation(computeProgram, "u_enemy_count"),
-                static_cast<unsigned int>(enemyCount)
-            );
-            glUniform1f(
-                glGetUniformLocation(computeProgram, "u_collision_radius"),
-                radius * 2.0f
-            );
-            glUniform1ui(
-                glGetUniformLocation(computeProgram, "u_floats_per_vertex"),
-                static_cast<unsigned int>(numberOfFloatsPerVertex)
-            );
+            glUniform2f(computeUniforms.u_player_position, playerPosition.x, playerPosition.y);
+            glUniform1f(computeUniforms.u_delta_time, DeltaTime::deltaTime);
+            glUniform1ui(computeUniforms.u_enemy_count, static_cast<unsigned int>(enemyCount));
+            glUniform1f(computeUniforms.u_collision_radius, radius * 2.0f);
+            glUniform1ui(computeUniforms.u_floats_per_vertex, static_cast<unsigned int>(numberOfFloatsPerVertex));
         },
         ssbos,
         2,
@@ -103,9 +100,8 @@ void Enemy::readDebugBuffer() const {
 void Enemy::draw() const {
     glUseProgram(shaderProgram);
     auto cam = getCameraPosition();
-    glUniform2f(u_camera, cam.x, cam.y);
-    // radius is in OpenGL units [-1..1], so point size in pixels = radius * screenWidth
-    glUniform1f(u_point_size, radius * (float)screenWidth);
+    glUniform2f(renderUniforms.u_camera, cam.x, cam.y);
+    glUniform1f(renderUniforms.u_point_size, radius * (float)screenWidth);
     glBindVertexArray(vao);
     glDrawArrays(GL_POINTS, 0, enemyCount);
     glBindVertexArray(0);

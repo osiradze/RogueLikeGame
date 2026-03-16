@@ -17,13 +17,87 @@ uniform uint u_enemy_count;
 uniform float u_collision_radius;
 uniform uint u_floats_per_vertex;
 
-const float ENEMY_SPEED = 0.6;
+const float ENEMY_SPEED = 0.3;
 
 struct Quadrant {
     float id;
     vec4 bounds;
 };
 
+vec2 collisionByQuadrant(uint id,uint index, float qId, vec2 enemy_position);
+Quadrant getQuadrant(vec2 position, vec4 bounds);
+void calculateQuadrant(uint index, vec2 enemy_position);
+
+
+
+void main() {
+
+    uint id = gl_WorkGroupID.x;
+    uint index = id * u_floats_per_vertex;
+
+    vec2 current_position = vec2(inputOutput.data[index], inputOutput.data[index + 1u]);
+    vec2 velocity = vec2(inputOutput.data[index + 2u], inputOutput.data[index + 3u]);
+    float qId = inputOutput.data[index + 5u];
+
+    // Separate from other enemies by pushing position
+    current_position = collisionByQuadrant(id, index, qId, current_position);
+
+    // Chase player
+    vec2 toPlayer = u_player_position - current_position;
+    float dist = length(toPlayer);
+    vec2 dir = (toPlayer / dist) * ENEMY_SPEED;
+    velocity = dir;
+
+    // Update position
+    current_position += velocity * u_delta_time;
+    inputOutput.data[index] = current_position.x;
+    inputOutput.data[index + 1u] = current_position.y;
+    inputOutput.data[index + 2u] = velocity.x;
+    inputOutput.data[index + 3u] = velocity.y;
+
+    //calculate area
+    calculateQuadrant(id, current_position);
+
+}
+
+vec2 collisionByQuadrant(uint id,uint index, float qId, vec2 current_position){
+    vec2 updated_position = current_position;
+    // Separate from other enemies by pushing position
+    for (uint i = 0u; i < u_enemy_count; i++) {
+        if (i == id) continue;
+        uint otherIndex = i * u_floats_per_vertex;
+        float otherQId = inputOutput.data[otherIndex + 5u];
+        if (otherQId != qId) {
+            continue;
+        }
+        vec2 other_position = vec2(inputOutput.data[otherIndex], inputOutput.data[otherIndex + 1u]);
+        vec2 diff = current_position - other_position;
+        float d = length(diff);
+        if (d < u_collision_radius && d > 0.0001) {
+            float overlap = (u_collision_radius - d) * 0.5;
+            updated_position += (diff / d) * overlap;
+        }
+    }
+    return updated_position;
+}
+
+
+
+void calculateQuadrant(uint index, vec2 enemy_position) {
+    vec4 bounds = vec4(-10.0, -10.0, 10.0, 10.0);
+    int divideNumber = 8;
+    float newQid = 0.0;
+    uint multiplier = 10000000u;
+
+    for(int i = 0; i < divideNumber; i++) {
+        Quadrant quad = getQuadrant(enemy_position, bounds);
+        bounds = quad.bounds;
+        newQid += quad.id * float(multiplier);
+        multiplier /= 10u;
+    }
+    inputOutput.data[index + 5u] = newQid;
+
+}
 
 Quadrant getQuadrant(vec2 position, vec4 bounds) {
     float halfLengthX = (bounds.z - bounds.x) * 0.5;
@@ -45,80 +119,6 @@ Quadrant getQuadrant(vec2 position, vec4 bounds) {
             return Quadrant(0.0, vec4(bounds.x, bounds.y, midX, midY));
         }
     }
-}
-
-
-void main() {
-
-    uint id = gl_WorkGroupID.x;
-    uint index = id * u_floats_per_vertex;
-
-    vec2 enemy_position = vec2(inputOutput.data[index], inputOutput.data[index + 1u]);
-    vec2 velocity = vec2(inputOutput.data[index + 2u], inputOutput.data[index + 3u]);
-    float qId = inputOutput.data[index + 5u];
-
-    // Separate from other enemies by pushing position
-    for (uint i = 0u; i < u_enemy_count; i++) {
-        if (i == id) continue;
-        uint otherIndex = i * u_floats_per_vertex;
-        float otherQId = inputOutput.data[otherIndex + 5u];
-        if (otherQId != qId) {
-            continue;
-        }
-        vec2 other_position = vec2(inputOutput.data[otherIndex], inputOutput.data[otherIndex + 1u]);
-        vec2 diff = enemy_position - other_position;
-        float d = length(diff);
-        if (d < u_collision_radius && d > 0.0001) {
-            float overlap = (u_collision_radius - d) * 0.5;
-            enemy_position += (diff / d) * overlap;
-        }
-    }
-
-
-    // Chase player
-    vec2 toPlayer = u_player_position - enemy_position;
-    float dist = length(toPlayer);
-    vec2 dir = (toPlayer / dist) * ENEMY_SPEED;
-    if(dist > 0.3 && inputOutput.data[index + 4u] > 0.5) {
-        velocity = dir;
-    } else if(dist < 0.3) {
-        inputOutput.data[index + 4u] = 0.0;
-        velocity = -dir;
-    } else {
-        velocity = vec2(0.0);
-    }
-
-    // Update position
-    enemy_position += velocity * u_delta_time;
-
-    inputOutput.data[index] = enemy_position.x;
-    inputOutput.data[index + 1u] = enemy_position.y;
-    inputOutput.data[index + 2u] = velocity.x;
-    inputOutput.data[index + 3u] = velocity.y;
-
-    //calculate area
-    vec4 bounds = vec4(-10.0, -10.0, 10.0, 10.0);
-    int divideNumber = 8;
-    float newQid = 0.0;
-    uint multiplier = 10000000u;
-
-    for(int i = 0; i < divideNumber; i++) {
-        Quadrant quad = getQuadrant(enemy_position, bounds);
-        bounds = quad.bounds;
-        newQid += quad.id * float(multiplier);
-        multiplier /= 10u;
-    }
-    inputOutput.data[index + 5u] = newQid;
-
-    if(id == 0u) {
-        debugOutput.debug[0] = newQid;
-        debugOutput.debug[1] = bounds.x - bounds.z;
-        debugOutput.debug[2] = bounds.y - bounds.w;
-        debugOutput.debug[3] = qId / 10.0;
-    }
-
-
-
 }
 
 

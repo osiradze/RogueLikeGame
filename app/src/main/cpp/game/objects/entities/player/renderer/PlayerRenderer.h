@@ -8,6 +8,7 @@
 #include "primitives/Plane.h"
 #include "shaders/ShadersPaths.h"
 #include "base/Translation.h"
+#include "base/UniformLocations.h"
 
 class PlayerRenderer {
 public:
@@ -32,8 +33,7 @@ private:
     unsigned int vbo = 0;
     unsigned int ebo = 0;
 
-    int u_model = {};
-    int u_camera = {};
+    Uniforms uniforms;
 
     void initUniforms();
     void initData();

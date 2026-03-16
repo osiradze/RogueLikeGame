@@ -10,7 +10,7 @@ void LineRenderer::init() {
     // init programs
     if (!OpenglUtils::createProgram(shaderProgram, shaders.vertexShader.c_str(),
                                     shaders.fragmentShader.c_str())) { return; }
-    u_camera = glGetUniformLocation(shaderProgram, "u_camera");
+    uniforms.u_camera = glGetUniformLocation(shaderProgram, "u_camera");
     initData();
 }
 
@@ -56,7 +56,7 @@ void LineRenderer::updateData() {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     auto cam = getCameraPosition();
-    glUniform2f(u_camera, cam.x, cam.y);
+    glUniform2f(uniforms.u_camera, cam.x, cam.y);
 }
 
 void LineRenderer::destroy() {
