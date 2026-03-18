@@ -44,13 +44,10 @@ private:
     std::function<glm::vec3()> getPlayerPosition;
     std::function<glm::vec3()> getCameraPosition;
 
-    static constexpr int DEBUG_BUFFER_SIZE = 4;
-
     unsigned int shaderProgram {};
     unsigned int computeProgram {};
     unsigned int vao = 0;
     unsigned int vbo = 0;
-    unsigned int debugSSBO = 0;
 
     Uniforms renderUniforms;
     Uniforms computeUniforms;

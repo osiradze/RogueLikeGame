@@ -17,7 +17,7 @@ uniform uint u_enemy_count;
 uniform float u_collision_radius;
 uniform uint u_floats_per_vertex;
 
-const float ENEMY_SPEED = 0.3;
+const float ENEMY_SPEED = 0.1;
 
 struct Quadrant {
     float id;
@@ -37,9 +37,9 @@ void main() {
 
     vec2 current_position = vec2(inputOutput.data[index], inputOutput.data[index + 1u]);
     vec2 velocity = vec2(inputOutput.data[index + 2u], inputOutput.data[index + 3u]);
-    float qId = inputOutput.data[index + 5u];
 
     // Separate from other enemies by pushing position
+    float qId = inputOutput.data[index + 5u];
     current_position = collisionByQuadrant(id, index, qId, current_position);
 
     // Chase player

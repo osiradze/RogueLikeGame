@@ -40,6 +40,7 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         game/objects/entities/enemy/EnemyRenderer.cpp
         game/utils/OpenglUtils.cpp
         game/utils/ShaderUtil.cpp
+        game/vbo/SSBOReader.cpp
         # List C/C++ source files with relative paths to this CMakeLists.txt.
 )
 
