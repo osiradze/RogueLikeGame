@@ -58,7 +58,7 @@ void Enemy::initData() {
 }
 
 void Enemy::runCompute() {
-    unsigned int ssbos[] = { vbo, SSBOReader::ssbo };
+    unsigned int ssbos[] = { vbo };
     ShaderUtil::computeShader(
         computeProgram,
         [this]() {

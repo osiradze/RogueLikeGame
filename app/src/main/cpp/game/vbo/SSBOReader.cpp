@@ -9,6 +9,7 @@ SSBOReader::SSBOReader() {
 }
 
 void SSBOReader::init() {
+    delete[] cleanData;
     cleanData = new float[size]();
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
     glBufferData(GL_SHADER_STORAGE_BUFFER, size * sizeof(float), cleanData, GL_DYNAMIC_READ);
@@ -17,7 +18,7 @@ void SSBOReader::init() {
 
 void SSBOReader::read() {
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
-    delete readData;
+    delete[] readData;
     readData = (float*)glMapBufferRange(
             GL_SHADER_STORAGE_BUFFER, 0,
             size * sizeof(float),
