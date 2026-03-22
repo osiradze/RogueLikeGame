@@ -38,6 +38,7 @@ void Enemy::initUniforms() {
     computeUniforms.u_enemy_count       = glGetUniformLocation(computeProgram, "u_enemy_count");
     computeUniforms.u_collision_radius  = glGetUniformLocation(computeProgram, "u_collision_radius");
     computeUniforms.u_floats_per_vertex = glGetUniformLocation(computeProgram, "u_floats_per_vertex");
+    computeUniforms.u_bounds            = glGetUniformLocation(computeProgram, "u_bounds");
 }
 
 void Enemy::initData() {
@@ -67,6 +68,7 @@ void Enemy::runCompute() {
             glUniform1ui(computeUniforms.u_enemy_count, static_cast<unsigned int>(enemyCount));
             glUniform1f(computeUniforms.u_collision_radius, radius * 2.0f);
             glUniform1ui(computeUniforms.u_floats_per_vertex, static_cast<unsigned int>(numberOfFloatsPerVertex));
+            glUniform4f(computeUniforms.u_bounds, spawnBounds.x, spawnBounds.y, spawnBounds.z, spawnBounds.w);
         },
         ssbos,
         2,

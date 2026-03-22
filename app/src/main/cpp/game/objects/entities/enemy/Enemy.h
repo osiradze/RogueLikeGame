@@ -27,9 +27,11 @@ private:
     // chasing - 1
     // in area
     int numberOfFloatsPerVertex = 6;
-    int enemyCount = 1000;
+    int enemyCount = 2000;
     float radius = 0.01f;
     int screenWidth = 1;
+    float size = 5.0;
+    glm::vec4 spawnBounds = glm::vec4(-size, -size, size, size);
 
     std::unique_ptr<GLObjectData> data = std::make_unique<GLObjectData>(
             "enemy", numberOfFloatsPerVertex, enemyCount * numberOfFloatsPerVertex, getData()

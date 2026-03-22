@@ -16,6 +16,7 @@ uniform float u_delta_time;
 uniform uint u_enemy_count;
 uniform float u_collision_radius;
 uniform uint u_floats_per_vertex;
+uniform vec4 u_bounds;
 
 const float ENEMY_SPEED = 0.1;
 
@@ -84,7 +85,7 @@ vec2 collisionByQuadrant(uint id,uint index, float qId, vec2 current_position){
 
 
 void calculateQuadrant(uint index, vec2 enemy_position) {
-    vec4 bounds = vec4(-10.0, -10.0, 10.0, 10.0);
+    vec4 bounds = u_bounds;
     int divideNumber = 8;
     float newQid = 0.0;
     uint multiplier = 10000000u;

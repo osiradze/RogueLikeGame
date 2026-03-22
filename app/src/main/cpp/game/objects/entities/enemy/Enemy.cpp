@@ -9,12 +9,13 @@ std::unique_ptr<float[]> Enemy::getData() const {
     auto buffer = std::make_unique<float[]>(enemyCount * numberOfFloatsPerVertex);
 
     std::mt19937 rng(std::random_device{}());
-    std::uniform_real_distribution<float> dist(-10, 10);
+    std::uniform_real_distribution<float> distX(spawnBounds.x, spawnBounds.z);
+    std::uniform_real_distribution<float> distY(spawnBounds.y, spawnBounds.w);
 
     for (int i = 0; i < enemyCount; i++) {
         int offset = i * numberOfFloatsPerVertex;
-        buffer[offset + 0] = dist(rng); // x
-        buffer[offset + 1] = dist(rng); // y
+        buffer[offset + 0] = distX(rng); // x
+        buffer[offset + 1] = distY(rng); // y
         buffer[offset + 2] = 0.0f;      // vx
         buffer[offset + 3] = 0.0f;      // vy
         buffer[offset + 4] = 1.0f;      // stopper
