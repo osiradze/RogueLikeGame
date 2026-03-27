@@ -8,23 +8,22 @@
 #include "utils/OpenglUtils.h"
 #include "utils/ShaderUtil.h"
 #include "time/DeltaTime.h"
-#include "vbo/SSBOReader.h"
+#include "vbo/ISSBOBuffer.h"
 
 #define LOG_TAG "EnemyDebug"
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 
-void Enemy::init() {
+void Enemy::initRender() {
     if (!data || !data->vertexData) return;
 
     // init render program
-    if (!OpenglUtils::createProgram(shaderProgram, shaders.vertexShader.c_str(),
-                                    shaders.fragmentShader.c_str())) { return; }
-
+    if (!OpenglUtils::createProgram(shaderProgram, shaders.vertexShader.c_str(),shaders.fragmentShader.c_str())) { return; }
     // init compute program
     if (!OpenglUtils::createComputeProgram(computeProgram, shaders.computeShader.c_str())) { return; }
 
     initUniforms();
     initData();
+    data.reset();
 }
 
 void Enemy::initUniforms() {
@@ -39,6 +38,13 @@ void Enemy::initUniforms() {
     computeUniforms.u_collision_radius  = glGetUniformLocation(computeProgram, "u_collision_radius");
     computeUniforms.u_floats_per_vertex = glGetUniformLocation(computeProgram, "u_floats_per_vertex");
     computeUniforms.u_bounds            = glGetUniformLocation(computeProgram, "u_bounds");
+
+    glUseProgram(computeProgram);
+    glUniform1ui(computeUniforms.u_enemy_count, static_cast<unsigned int>(properties.enemyCount));
+    glUniform1f(computeUniforms.u_collision_radius, properties.radius * 2.0f);
+    glUniform1ui(computeUniforms.u_floats_per_vertex, static_cast<unsigned int>(properties.numberOfFloatsPerVertex));
+    glUniform4f(computeUniforms.u_bounds, spawnBounds.x, spawnBounds.y, spawnBounds.z, spawnBounds.w);
+    glUseProgram(0);
 }
 
 void Enemy::initData() {
@@ -58,21 +64,17 @@ void Enemy::initData() {
 }
 
 void Enemy::runCompute() {
-    unsigned int ssbos[] = { vbo };
+    unsigned int ssbos[] = { vbo, reader->getSSBO() };
     ShaderUtil::computeShader(
         computeProgram,
         [this]() {
             auto playerPosition = getPlayerPosition();
             glUniform2f(computeUniforms.u_player_position, playerPosition.x, playerPosition.y);
             glUniform1f(computeUniforms.u_delta_time, DeltaTime::deltaTime);
-            glUniform1ui(computeUniforms.u_enemy_count, static_cast<unsigned int>(enemyCount));
-            glUniform1f(computeUniforms.u_collision_radius, radius * 2.0f);
-            glUniform1ui(computeUniforms.u_floats_per_vertex, static_cast<unsigned int>(numberOfFloatsPerVertex));
-            glUniform4f(computeUniforms.u_bounds, spawnBounds.x, spawnBounds.y, spawnBounds.z, spawnBounds.w);
         },
         ssbos,
         2,
-        enemyCount, 1, 1
+        properties.enemyCount, 1, 1
     );
 }
 
@@ -80,9 +82,9 @@ void Enemy::draw() const {
     glUseProgram(shaderProgram);
     auto cam = getCameraPosition();
     glUniform2f(renderUniforms.u_camera, cam.x, cam.y);
-    glUniform1f(renderUniforms.u_point_size, radius * (float)screenWidth);
+    glUniform1f(renderUniforms.u_point_size, properties.radius * (float)properties.screenWidth);
     glBindVertexArray(vao);
-    glDrawArrays(GL_POINTS, 0, enemyCount);
+    glDrawArrays(GL_POINTS, 0, properties.enemyCount);
     glBindVertexArray(0);
     glUseProgram(0);
 }

@@ -7,9 +7,9 @@ layout (std430, binding = 0) buffer InputOutputBuffer {
     float data[];
 } inputOutput;
 
-layout (std430, binding = 1) buffer DebugBuffer {
-    float debug[];
-} debugOutput;
+layout (std430, binding = 1) buffer readBuffer {
+    float read[];
+} readOutput;
 
 uniform vec2 u_player_position;
 uniform float u_delta_time;
@@ -35,7 +35,6 @@ void main() {
 
     uint id = gl_WorkGroupID.x;
     uint index = id * u_floats_per_vertex;
-
     vec2 current_position = vec2(inputOutput.data[index], inputOutput.data[index + 1u]);
     vec2 velocity = vec2(inputOutput.data[index + 2u], inputOutput.data[index + 3u]);
 
@@ -48,6 +47,9 @@ void main() {
     float dist = length(toPlayer);
     vec2 dir = (toPlayer / dist) * ENEMY_SPEED;
     velocity = dir;
+    if(dist < u_collision_radius) {
+        velocity = vec2(0.0);
+    }
 
     // Update position
     current_position += velocity * u_delta_time;

@@ -8,6 +8,11 @@ SSBOReader::SSBOReader() {
     glGenBuffers(1, &ssbo);
 }
 
+void SSBOReader::allocate(const std::string& key, int length) {
+    buffers[key] = std::make_pair(size, length);
+    size += length;
+}
+
 void SSBOReader::init() {
     delete[] cleanData;
     cleanData = new float[size]();
@@ -27,11 +32,6 @@ void SSBOReader::read() {
     init();
 }
 
-void SSBOReader::allocate(const std::string& key, int length) {
-    buffers[key] = std::make_pair(size, length);
-    size += length;
-}
-
 std::vector<float> SSBOReader::getData(const std::string& key) {
     auto it = buffers.find(key);
     if (it == buffers.end() || readData == nullptr) {
@@ -42,5 +42,11 @@ std::vector<float> SSBOReader::getData(const std::string& key) {
     unsigned int size   = it->second.second;
 
     return {readData + offset, readData + offset + size};
+}
+
+void SSBOReader::destroy() {
+    glDeleteBuffers(1, &ssbo);
+    delete[] cleanData;
+    delete[] readData;
 }
 

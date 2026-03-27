@@ -5,6 +5,7 @@
 #include "objects/entities/player/Player.h"
 #include "entities/enemy/Enemy.h"
 #include "entities/camera/Camera.h"
+#include "vbo/SSBOReader.h"
 
 class GameRenderer {
 public:
@@ -25,6 +26,7 @@ private:
     std::unique_ptr<Player> player;
     std::unique_ptr<Enemy> enemy;
     std::unique_ptr<Camera> camera;
+    std::unique_ptr<SSBOReader> reader;
 
 
 

@@ -6,35 +6,44 @@
 #include "base/UniformLocations.h"
 #include "GameObject.h"
 #include "shaders/ShadersPaths.h"
+#include "vbo/ISSBOBuffer.h"
 #include <glm/glm.hpp>
+
+struct EnemyProperties {
+    // position 2 - x,y, velocity 2 - vx vy, chasing - 1, in area
+    int numberOfFloatsPerVertex = 6;
+    int enemyCount = 2000;
+    float radius = 0.01f;
+    float size = 5.0;
+    int screenWidth = 1;
+};
 
 class Enemy: public GameObject {
 public:
     void init() override;
     void update() override;
     void destroy() override;
-    void setScreenWidth(int width) { screenWidth = width; }
+    void setScreenWidth(int width) { properties.screenWidth = width; }
 
     explicit Enemy(
             std::function<glm::vec3()> getPlayerPosition,
-            std::function<glm::vec3()> getCameraPosition
-    ) : getPlayerPosition(std::move(getPlayerPosition)), getCameraPosition(std::move(getCameraPosition)) {}
+            std::function<glm::vec3()> getCameraPosition,
+            ISSBOBuffer* reader
+    ) :
+    getPlayerPosition(std::move(getPlayerPosition)),
+    getCameraPosition(std::move(getCameraPosition)),
+    reader(reader){}
 private:
+    std::string name = "enemy";
+    EnemyProperties properties {};
+    glm::vec4 spawnBounds = glm::vec4(-properties.size, -properties.size, properties.size, properties.size);
+
     [[nodiscard]] std::unique_ptr<float[]> getData() const;
-
-    // position 2 - x,y
-    // velocity 2 - vx vy
-    // chasing - 1
-    // in area
-    int numberOfFloatsPerVertex = 6;
-    int enemyCount = 2000;
-    float radius = 0.01f;
-    int screenWidth = 1;
-    float size = 5.0;
-    glm::vec4 spawnBounds = glm::vec4(-size, -size, size, size);
-
     std::unique_ptr<GLObjectData> data = std::make_unique<GLObjectData>(
-            "enemy", numberOfFloatsPerVertex, enemyCount * numberOfFloatsPerVertex, getData()
+            name,
+            properties.numberOfFloatsPerVertex,
+            properties.enemyCount * properties.numberOfFloatsPerVertex,
+            getData()
     );
 
     ShadersPaths shaders {
@@ -54,9 +63,15 @@ private:
     Uniforms renderUniforms;
     Uniforms computeUniforms;
 
+    ISSBOBuffer* reader;
+    int readSize = 4;
+
+
+
+    void initRender();
     void initUniforms();
     void initData();
     void runCompute();
-    void readDebugBuffer() const;
     void draw() const;
+    void handleReadData(std::vector<float> data);
 };

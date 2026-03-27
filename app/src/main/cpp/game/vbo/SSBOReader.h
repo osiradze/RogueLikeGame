@@ -6,14 +6,19 @@
 #include <unordered_map>
 #include <vector>
 
+#pragma once
 
-class SSBOReader  {
+#include "ISSBOBuffer.h"
+
+class SSBOReader : public ISSBOBuffer {
 public:
     SSBOReader();
-    void allocate(const std::string& key, int length);
+    void allocate(const std::string& key, int length) override;
     void init();
     void read();
-    std::vector<float> getData(const std::string& key);
+    void destroy();
+    std::vector<float> getData(const std::string& key) override;
+    [[nodiscard]] unsigned int getSSBO() const override { return ssbo; }
 private:
     std::unordered_map<std::string, std::pair<unsigned int, unsigned int>> buffers;
     float* cleanData = nullptr;

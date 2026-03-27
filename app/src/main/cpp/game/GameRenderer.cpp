@@ -5,13 +5,23 @@
 
 void GameRenderer::onSurfaceCreated() {
     initGLConfig();
+    reader = std::make_unique<SSBOReader>();
     camera = std::make_unique<Camera>();
-    player = std::make_unique<Player>(camera->getPositionFunction());
-    camera->setPlayerPositionFunction(player->getPositionFunction());
+    player = std::make_unique<Player>(
+            camera->getPositionFunction()
+    );
+    camera->setPlayerPositionFunction(
+            player->getPositionFunction()
+    );
     player->init();
 
-    enemy = std::make_unique<Enemy>(player->getPositionFunction(), camera->getPositionFunction());
+    enemy = std::make_unique<Enemy>(
+            player->getPositionFunction(),
+            camera->getPositionFunction(),
+            reader.get()
+    );
     enemy->init();
+    reader->init();
 }
 
 void GameRenderer::onDrawFrame() {
@@ -19,6 +29,7 @@ void GameRenderer::onDrawFrame() {
     enemy->update();
     player->update();
     camera->update();
+    reader->read();
 }
 
 void GameRenderer::onSurfaceChanged(int width, int height) {
@@ -29,6 +40,7 @@ void GameRenderer::onSurfaceChanged(int width, int height) {
 void GameRenderer::onDestroy() {
     player->destroy();
     enemy->destroy();
+    reader->destroy();
 }
 
 void GameRenderer::onMove(Move move) {
