@@ -2,6 +2,7 @@
 // Created by oto_9 on 18.03.2026.
 //
 #include <GLES3/gl31.h>
+#include <cstring>
 #include "SSBOReader.h"
 
 SSBOReader::SSBOReader() {
@@ -23,12 +24,25 @@ void SSBOReader::init() {
 
 void SSBOReader::read() {
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
-    delete[] readData;
-    readData = (float*)glMapBufferRange(
+
+    float* mapped = (float*)glMapBufferRange(
             GL_SHADER_STORAGE_BUFFER, 0,
             size * sizeof(float),
             GL_MAP_READ_BIT
     );
+
+    delete[] readData;
+    readData = nullptr;
+
+    if (mapped) {
+        readData = new float[size];
+        memcpy(readData, mapped, size * sizeof(float));
+        glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+    }
+
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+
+    // reset SSBO to zeros for the next frame
     init();
 }
 
@@ -47,6 +61,8 @@ std::vector<float> SSBOReader::getData(const std::string& key) {
 void SSBOReader::destroy() {
     glDeleteBuffers(1, &ssbo);
     delete[] cleanData;
+    cleanData = nullptr;
     delete[] readData;
+    readData = nullptr;
 }
 
