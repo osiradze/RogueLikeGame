@@ -9,9 +9,11 @@ SSBOReader::SSBOReader() {
     glGenBuffers(1, &ssbo);
 }
 
-void SSBOReader::allocate(const std::string& key, int length) {
-    buffers[key] = std::make_pair(size, length);
+unsigned int SSBOReader::allocate(const std::string& key, int length) {
+    unsigned int offset = size;
+    buffers[key] = std::make_pair(offset, length);
     size += length;
+    return offset;
 }
 
 void SSBOReader::init() {

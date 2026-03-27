@@ -38,12 +38,14 @@ void Enemy::initUniforms() {
     computeUniforms.u_collision_radius  = glGetUniformLocation(computeProgram, "u_collision_radius");
     computeUniforms.u_floats_per_vertex = glGetUniformLocation(computeProgram, "u_floats_per_vertex");
     computeUniforms.u_bounds            = glGetUniformLocation(computeProgram, "u_bounds");
+    computeUniforms.u_ssbo_offset       = glGetUniformLocation(computeProgram, "u_ssbo_offset");
 
     glUseProgram(computeProgram);
     glUniform1ui(computeUniforms.u_enemy_count, static_cast<unsigned int>(properties.enemyCount));
     glUniform1f(computeUniforms.u_collision_radius, properties.radius * 2.0f);
     glUniform1ui(computeUniforms.u_floats_per_vertex, static_cast<unsigned int>(properties.numberOfFloatsPerVertex));
     glUniform4f(computeUniforms.u_bounds, spawnBounds.x, spawnBounds.y, spawnBounds.z, spawnBounds.w);
+    glUniform1ui(computeUniforms.u_ssbo_offset, ssboOffset);
     glUseProgram(0);
 }
 

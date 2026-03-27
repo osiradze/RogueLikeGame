@@ -15,5 +15,6 @@ struct Uniforms {
     int u_collision_radius  = -1;
     int u_floats_per_vertex = -1;
     int u_bounds            = -1;
+    int u_ssbo_offset       = -1;
 };
 

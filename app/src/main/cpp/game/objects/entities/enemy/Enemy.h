@@ -64,6 +64,7 @@ private:
     Uniforms computeUniforms;
 
     ISSBOBuffer* reader;
+    unsigned int ssboOffset = 0;
     int readSize = 4;
 
 

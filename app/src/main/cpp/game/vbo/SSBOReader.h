@@ -13,7 +13,7 @@
 class SSBOReader : public ISSBOBuffer {
 public:
     SSBOReader();
-    void allocate(const std::string& key, int length) override;
+    unsigned int allocate(const std::string& key, int length) override;
     void init();
     void read();
     void destroy();

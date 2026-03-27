@@ -26,7 +26,7 @@ std::unique_ptr<float[]> Enemy::getData() const {
 }
 
 void Enemy::init() {
-    reader->allocate(name, readSize);
+    ssboOffset = reader->allocate(name, readSize);
     initRender();
 }
 
