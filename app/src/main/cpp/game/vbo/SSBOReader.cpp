@@ -55,9 +55,9 @@ std::vector<float> SSBOReader::getData(const std::string& key) {
     }
 
     unsigned int offset = it->second.first;
-    unsigned int size   = it->second.second;
+    unsigned int length = it->second.second;
 
-    return {readData + offset, readData + offset + size};
+    return {readData + offset, readData + offset + length};
 }
 
 void SSBOReader::destroy() {

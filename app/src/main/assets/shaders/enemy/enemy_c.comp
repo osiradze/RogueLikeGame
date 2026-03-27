@@ -20,6 +20,7 @@ uniform vec4 u_bounds;
 uniform uint u_ssbo_offset;
 
 const float ENEMY_SPEED = 0.1;
+const float MAX_VELOCITY = 0.3;
 
 struct Quadrant {
     float id;
@@ -52,6 +53,7 @@ void main() {
         velocity = vec2(0.0);
         uint isTouchingIndex = u_ssbo_offset;
         readOutput.read[isTouchingIndex] = 1.0;
+        velocity = -dir * 5.0;
     }
 
 

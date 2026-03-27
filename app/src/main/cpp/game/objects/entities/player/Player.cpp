@@ -48,7 +48,13 @@ void Player::onUp() {
     direction = glm::vec3(0);
 }
 
-glm::vec3 Player::getPosition() {
+glm::vec3 Player::getPosition() const {
     return playerTranslation.getPosition();
 }
+
+void Player::inCollision() {
+
+}
+
+
 

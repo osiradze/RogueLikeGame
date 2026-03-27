@@ -70,7 +70,7 @@ void Enemy::runCompute() {
     ShaderUtil::computeShader(
         computeProgram,
         [this]() {
-            auto playerPosition = getPlayerPosition();
+            auto playerPosition = target->getPosition();
             glUniform2f(computeUniforms.u_player_position, playerPosition.x, playerPosition.y);
             glUniform1f(computeUniforms.u_delta_time, DeltaTime::deltaTime);
         },

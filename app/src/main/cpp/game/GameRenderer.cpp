@@ -16,7 +16,7 @@ void GameRenderer::onSurfaceCreated() {
     player->init();
 
     enemy = std::make_unique<Enemy>(
-            player->getPositionFunction(),
+            player.get(),
             camera->getPositionFunction(),
             reader.get()
     );
@@ -29,7 +29,11 @@ void GameRenderer::onDrawFrame() {
     enemy->update();
     player->update();
     camera->update();
-    reader->read();
+
+    if (++frameCount >= readInterval) {
+        frameCount = 0;
+        reader->read();
+    }
 }
 
 void GameRenderer::onSurfaceChanged(int width, int height) {

@@ -34,7 +34,7 @@ public:
         isDirty = true;
     }
 
-    glm::vec3 getPosition() {
+    glm::vec3 getPosition() const {
         return this->position;
     }
 

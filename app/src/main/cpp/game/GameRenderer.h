@@ -28,6 +28,9 @@ private:
     std::unique_ptr<Camera> camera;
     std::unique_ptr<SSBOReader> reader;
 
+    int readInterval = 20; // read every Nth frame
+    int frameCount   = 0;
+
 
 
 

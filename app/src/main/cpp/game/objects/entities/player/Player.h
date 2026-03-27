@@ -13,8 +13,9 @@
 #include "renderer/line/LineRenderer.h"
 #include "events/Move.h"
 #include "time/DeltaTime.h"
+#include "entities/IEnemyTarget.h"
 
-class Player: public GameObject {
+class Player: public GameObject, public IEnemyTarget {
 public:
 
     void init() override;
@@ -29,7 +30,8 @@ public:
 
     void onUp();
 
-    glm::vec3 getPosition();
+    [[nodiscard]] glm::vec3 getPosition() const override;
+    void inCollision() override;
 
     std::function<glm::vec3()> getPositionFunction() {
         return [this]() { return getPosition(); };

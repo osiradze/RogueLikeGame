@@ -7,13 +7,14 @@
 #include "GameObject.h"
 #include "shaders/ShadersPaths.h"
 #include "vbo/ISSBOBuffer.h"
+ #include "entities/IEnemyTarget.h"
 #include <glm/glm.hpp>
 
 struct EnemyProperties {
     // position 2 - x,y, velocity 2 - vx vy, chasing - 1, in area
     int numberOfFloatsPerVertex = 6;
     int enemyCount = 2000;
-    float radius = 0.01f;
+    float radius = 0.02f;
     float size = 5.0;
     int screenWidth = 1;
 };
@@ -26,13 +27,13 @@ public:
     void setScreenWidth(int width) { properties.screenWidth = width; }
 
     explicit Enemy(
-            std::function<glm::vec3()> getPlayerPosition,
+            IEnemyTarget* target,
             std::function<glm::vec3()> getCameraPosition,
             ISSBOBuffer* reader
     ) :
-    getPlayerPosition(std::move(getPlayerPosition)),
+    target(target),
     getCameraPosition(std::move(getCameraPosition)),
-    reader(reader){}
+    reader(reader) {}
 private:
     std::string name = "enemy";
     EnemyProperties properties {};
@@ -52,7 +53,7 @@ private:
             "shaders/enemy/enemy_c.comp"
     };
 
-    std::function<glm::vec3()> getPlayerPosition;
+    IEnemyTarget* target;
     std::function<glm::vec3()> getCameraPosition;
 
     unsigned int shaderProgram {};
