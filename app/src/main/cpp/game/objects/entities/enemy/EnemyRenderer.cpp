@@ -39,6 +39,8 @@ void Enemy::initUniforms() {
     computeUniforms.u_floats_per_vertex = glGetUniformLocation(computeProgram, "u_floats_per_vertex");
     computeUniforms.u_bounds            = glGetUniformLocation(computeProgram, "u_bounds");
     computeUniforms.u_ssbo_offset       = glGetUniformLocation(computeProgram, "u_ssbo_offset");
+    computeUniforms.u_detection_radius  = glGetUniformLocation(computeProgram, "u_detection_radius");
+    computeUniforms.u_enemy_speed       = glGetUniformLocation(computeProgram, "u_enemy_speed");
 
     glUseProgram(computeProgram);
     glUniform1ui(computeUniforms.u_enemy_count, static_cast<unsigned int>(properties.enemyCount));
@@ -46,6 +48,8 @@ void Enemy::initUniforms() {
     glUniform1ui(computeUniforms.u_floats_per_vertex, static_cast<unsigned int>(properties.numberOfFloatsPerVertex));
     glUniform4f(computeUniforms.u_bounds, spawnBounds.x, spawnBounds.y, spawnBounds.z, spawnBounds.w);
     glUniform1ui(computeUniforms.u_ssbo_offset, ssboOffset);
+    glUniform1f(computeUniforms.u_detection_radius, properties.detectionRadius);
+    glUniform1f(computeUniforms.u_enemy_speed, properties.enemySpeed);
     glUseProgram(0);
 }
 
@@ -99,5 +103,3 @@ void Enemy::destroy() {
     glDeleteProgram(shaderProgram);
     glDeleteProgram(computeProgram);
 }
-
-

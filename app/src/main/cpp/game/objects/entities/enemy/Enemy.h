@@ -17,6 +17,8 @@ struct EnemyProperties {
     float radius = 0.02f;
     float size = 5.0;
     int screenWidth = 1;
+    float detectionRadius = 1.5f;
+    float enemySpeed = 0.1f;
 };
 
 class Enemy: public GameObject {

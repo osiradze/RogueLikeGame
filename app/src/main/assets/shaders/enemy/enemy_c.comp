@@ -15,12 +15,11 @@ uniform vec2 u_player_position;
 uniform float u_delta_time;
 uniform uint u_enemy_count;
 uniform float u_collision_radius;
+uniform float u_detection_radius;
 uniform uint u_floats_per_vertex;
 uniform vec4 u_bounds;
 uniform uint u_ssbo_offset;
-
-const float ENEMY_SPEED = 0.1;
-const float MAX_VELOCITY = 0.3;
+uniform float u_enemy_speed;
 
 struct Quadrant {
     float id;
@@ -44,16 +43,18 @@ void main() {
     float qId = inputOutput.data[index + 5u];
     current_position = collisionByQuadrant(id, index, qId, current_position);
 
-    // Chase player
+    // Chase player only if within detection radius
     vec2 toPlayer = u_player_position - current_position;
     float dist = length(toPlayer);
-    vec2 dir = (toPlayer / dist) * ENEMY_SPEED;
-    velocity = dir;
-    if(dist < u_collision_radius) {
-        velocity = vec2(0.0);
-        uint isTouchingIndex = u_ssbo_offset;
-        readOutput.read[isTouchingIndex] = 1.0;
-        velocity = -dir * 5.0;
+    vec2 dir = (toPlayer / dist) * u_enemy_speed;
+    if (dist < u_detection_radius) {
+        velocity = dir;
+        if(dist < u_collision_radius) {
+            velocity = vec2(0.0);
+            uint isTouchingIndex = u_ssbo_offset;
+            readOutput.read[isTouchingIndex] = 1.0;
+            velocity = -dir * 5.0;
+        }
     }
 
 
@@ -63,10 +64,6 @@ void main() {
     inputOutput.data[index + 1u] = current_position.y;
     inputOutput.data[index + 2u] = velocity.x;
     inputOutput.data[index + 3u] = velocity.y;
-
-    // Write to read buffer at the allocated offset
-    readOutput.read[u_ssbo_offset + id * 2u]      = current_position.x;
-    readOutput.read[u_ssbo_offset + id * 2u + 1u] = current_position.y;
 
     //calculate area
     calculateQuadrant(id, current_position);
@@ -133,5 +130,3 @@ Quadrant getQuadrant(vec2 position, vec4 bounds) {
         }
     }
 }
-
-

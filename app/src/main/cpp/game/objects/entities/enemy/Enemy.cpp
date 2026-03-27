@@ -33,7 +33,7 @@ void Enemy::init() {
 void Enemy::update() {
     runCompute();
     draw();
-    handleReadData(reader->getData(name));
+    //handleReadData(reader->getData(name));
 }
 
 void Enemy::handleReadData(std::vector<float> data){
