@@ -12,8 +12,9 @@
 
 struct EnemyProperties {
     // position 2 - x,y, velocity 2 - vx vy, chasing - 1, in area
-    int numberOfFloatsPerVertex = 6;
-    int enemyCount = 2000;
+    // x, y, vx, vy, stopper, i, r, g, b
+    int numberOfFloatsPerVertex = 9;
+    int enemyCount = 5000;
     float radius = 0.02f;
     float size = 5.0;
     int screenWidth = 1;

@@ -11,6 +11,7 @@ std::unique_ptr<float[]> Enemy::getData() const {
     std::mt19937 rng(std::random_device{}());
     std::uniform_real_distribution<float> distX(spawnBounds.x, spawnBounds.z);
     std::uniform_real_distribution<float> distY(spawnBounds.y, spawnBounds.w);
+    std::uniform_real_distribution<float> distColor(0.0f, 1.0f);
 
     for (int i = 0; i < properties.enemyCount; i++) {
         int offset = i * properties.numberOfFloatsPerVertex;
@@ -20,6 +21,9 @@ std::unique_ptr<float[]> Enemy::getData() const {
         buffer[offset + 3] = 0.0f;      // vy
         buffer[offset + 4] = 1.0f;      // stopper
         buffer[offset + 5] = 0.0f;      // i
+        buffer[offset + 6] = distColor(rng); // r
+        buffer[offset + 7] = distColor(rng); // g
+        buffer[offset + 8] = distColor(rng); // b
     }
 
     return buffer;

@@ -48,13 +48,16 @@ void main() {
     float dist = length(toPlayer);
     vec2 dir = (toPlayer / dist) * u_enemy_speed;
     if (dist < u_detection_radius) {
-        velocity = dir;
         if(dist < u_collision_radius) {
-            velocity = vec2(0.0);
             uint isTouchingIndex = u_ssbo_offset;
             readOutput.read[isTouchingIndex] = 1.0;
-            velocity = -dir * 5.0;
+            velocity = -dir * 20.0;
+        } else if(length(velocity) < 0.05) {
+            velocity = dir;
+        } else {
+            velocity *= 0.96; // Damping to prevent infinite acceleration
         }
+
     }
 
 
