@@ -15,6 +15,13 @@
 #include "time/DeltaTime.h"
 #include "entities/IEnemyTarget.h"
 
+struct PlayerProperties {
+    float speed = 0.05;
+    float playerSize = 0.03;
+    float aimDistance = 0.3;
+    float aimSize = 0.02;
+};
+
 class Player: public GameObject, public IEnemyTarget {
 public:
 
@@ -41,15 +48,15 @@ public:
 
 
 private:
+    PlayerProperties properties {};
     Translation playerTranslation = Translation(
-            glm::vec3(0.0), glm::vec3(0.03), 0
+            glm::vec3(0.0), glm::vec3(properties.playerSize), 0
     );
 
     Translation aimTranslation = Translation(
-            glm::vec3(0.0), glm::vec3(0.01), 0
+            glm::vec3(0.0), glm::vec3(properties.aimSize), 0
     );
     glm::vec3 aimDirection{};
-    float maxAimDistance = 0.4f;
 
     std::function<glm::vec3()> getCameraPosition;
 
@@ -66,5 +73,5 @@ private:
 
     glm::vec3 direction{};
     glm::vec3 velocity{};
-    float speed = 0.05;
+
 };

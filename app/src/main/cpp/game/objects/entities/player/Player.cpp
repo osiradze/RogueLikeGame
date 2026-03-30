@@ -14,7 +14,7 @@ void Player::init() {
 
 void Player::update() {
     playerTranslation.move(velocity * DeltaTime::deltaTime);
-    velocity += direction * speed;
+    velocity += direction * properties.speed;
     velocity *= 0.90;
     aimTranslation.setPosition(playerTranslation.getPosition() + aimDirection);
 
@@ -38,7 +38,7 @@ void Player::onMove(Move move) {
     if(move.cNumber == 0){
         direction = glm::vec3(move.x, -move.y, 0);
     } else if(move.cNumber == 1) {
-        aimDirection = glm::normalize( glm::vec3(move.x, -move.y, 0)) * maxAimDistance;
+        aimDirection = glm::normalize( glm::vec3(move.x, -move.y, 0)) *  properties.aimDistance;
         aimDirection.x *= aimTranslation.getRatio();
     }
 
