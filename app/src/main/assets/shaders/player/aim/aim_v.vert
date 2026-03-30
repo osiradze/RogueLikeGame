@@ -1,4 +1,6 @@
 #version 300 es
+precision highp float;
+
 layout(location = 0) in vec2 a_vertex;
 uniform mat4 u_model;
 uniform vec2 u_camera;

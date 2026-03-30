@@ -27,8 +27,8 @@ void GameRenderer::onSurfaceCreated() {
 void GameRenderer::onDrawFrame() {
     clearBuffers();
     enemy->update();
+    camera->update(); // Move camera update before player
     player->update();
-    camera->update();
 
     if (++frameCount >= readInterval) {
         frameCount = 0;
@@ -54,4 +54,3 @@ void GameRenderer::onMove(Move move) {
 void GameRenderer::onUp() {
     player->onUp();
 }
-
