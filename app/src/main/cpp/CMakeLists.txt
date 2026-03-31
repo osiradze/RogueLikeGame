@@ -38,6 +38,8 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         game/objects/entities/player/renderer/line/LineRenderer.cpp
         game/objects/entities/enemy/Enemy.cpp
         game/objects/entities/enemy/EnemyRenderer.cpp
+        game/objects/entities/bullets/Bullets.cpp
+        game/objects/entities/bullets/BulletsRender.cpp
         game/utils/OpenglUtils.cpp
         game/utils/ShaderUtil.cpp
         game/vbo/SSBOReader.cpp

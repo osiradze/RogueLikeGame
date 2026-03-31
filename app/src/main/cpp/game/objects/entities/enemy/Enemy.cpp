@@ -2,7 +2,6 @@
 // Created by oto_9 on 10.03.2026.
 //
 #include "Enemy.h"
-#include "utils/OpenglUtils.h"
 #include <random>
 
 std::unique_ptr<float[]> Enemy::getData() const {
