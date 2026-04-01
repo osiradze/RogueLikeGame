@@ -3,11 +3,17 @@
 //
 
 #include <GLES3/gl31.h>
+#include <android/log.h>
 #include "Bullets.h"
 #include "utils/OpenglUtils.h"
+#include "utils/ShaderUtil.h"
+#include "time/DeltaTime.h"
+#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 
 
 void Bullets::initRender() {
+    __android_log_print(ANDROID_LOG_DEBUG, "Bullets", "Start");
+
     if (!data || !data->vertexData) return;
 
     // init render program
@@ -18,12 +24,22 @@ void Bullets::initRender() {
     initUniforms();
     initData();
     data.reset();
+    __android_log_print(ANDROID_LOG_DEBUG, "Bullets", "Success");
 }
 
 void Bullets::initUniforms() {
     // render uniforms
     renderUniforms.u_camera     = glGetUniformLocation(shaderProgram, "u_camera");
     renderUniforms.u_point_size = glGetUniformLocation(shaderProgram, "u_point_size");
+
+    computeUniforms.u_delta_time        = glGetUniformLocation(computeProgram, "u_delta_time");
+    computeUniforms.u_floats_per_vertex = glGetUniformLocation(computeProgram, "u_floats_per_vertex");
+
+    glUseProgram(computeProgram);
+    glUniform1ui(computeUniforms.u_floats_per_vertex, static_cast<unsigned int>(properties.numberOfFloatsPerVertex));
+    glUseProgram(0);
+
+
 }
 
 void Bullets::initData() {
@@ -47,20 +63,31 @@ void Bullets::initData() {
 }
 
 void Bullets::runCompute() {
-
+    unsigned int ssbos[] = { vbo };
+    ShaderUtil::computeShader(
+            computeProgram,
+            [this]() {
+                glUniform1f(computeUniforms.u_delta_time, DeltaTime::deltaTime);
+            },
+            ssbos,
+            1,
+            properties.maxBullets, 1, 1
+    );
 }
 
 void Bullets::draw() const {
     glUseProgram(shaderProgram);
     auto cam = getCameraPosition();
     glUniform2f(renderUniforms.u_camera, cam.x, cam.y);
-    glUniform1f(renderUniforms.u_point_size, properties.radius * (float)properties.screenWidth);
+    glUniform1f(renderUniforms.u_point_size, properties.bulletRadius * (float)screenWidth);
     glBindVertexArray(vao);
-    glDrawArrays(GL_POINTS, 0, properties.enemyCount);
+    glDrawArrays(GL_POINTS, 0, properties.maxBullets);
     glBindVertexArray(0);
     glUseProgram(0);
 }
 
 void Bullets::destroy() {
-
+    glBindVertexArray(0);
+    glUseProgram(0);
+    glDeleteVertexArrays(1, &vao);
 }

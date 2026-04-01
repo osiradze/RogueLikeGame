@@ -8,9 +8,10 @@
 #include "base/UniformLocations.h"
 
 struct BulletProperties {
+    // vertex attributes: position (x, y), velocity (x, y), color (r, g, b)
     int numberOfFloatsPerVertex = 7;
     int maxBullets = 50;
-    float bulletRadius = 0.02f;
+    float bulletRadius = 0.01f;
     float impactRadius = 0.1;
 };
 
@@ -20,7 +21,10 @@ public:
 
     void update() override;
 
+    void setScreenWidth(int width) { screenWidth = width; }
+
     void destroy() override;
+
     explicit Bullets(
             std::function<glm::vec3()> getCameraPosition
     ) : getCameraPosition(std::move(getCameraPosition)){}
@@ -38,10 +42,11 @@ private:
     );
 
     ShadersPaths shaders {
-            "shaders/bullets/enemy_v.vert",
-            "shaders/bullets/enemy_f.frag",
-            "shaders/bullets/enemy_c.comp"
+            "shaders/bullets/bullets_v.vert",
+            "shaders/bullets/bullets_f.frag",
+            "shaders/bullets/bullets_c.comp"
     };
+    int screenWidth = 1;
 
     unsigned int shaderProgram {};
     unsigned int computeProgram {};

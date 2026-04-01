@@ -1,0 +1,27 @@
+#version 310 es
+precision highp float;
+
+layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+
+layout (std430, binding = 0) buffer InputOutputBuffer {
+    float data[];
+} inputOutput;
+
+uniform float u_delta_time;
+uniform uint u_floats_per_vertex;
+
+
+void main() {
+
+    uint id = gl_WorkGroupID.x;
+    uint index = id * u_floats_per_vertex;
+    vec2 current_position = vec2(inputOutput.data[index], inputOutput.data[index + 1u]);
+    vec2 velocity = vec2(inputOutput.data[index + 2u], inputOutput.data[index + 3u]);
+
+
+    // Update position
+    current_position += velocity * u_delta_time;
+    inputOutput.data[index] = current_position.x;
+    inputOutput.data[index + 1u] = current_position.y;
+
+}

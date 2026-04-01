@@ -15,6 +15,10 @@ void GameRenderer::onSurfaceCreated() {
     );
     player->init();
 
+    bullets = std::make_unique<Bullets>(
+            camera->getPositionFunction()
+    );
+
     enemy = std::make_unique<Enemy>(
             player.get(),
             camera->getPositionFunction(),
@@ -22,13 +26,16 @@ void GameRenderer::onSurfaceCreated() {
     );
     enemy->init();
     reader->init();
+    bullets->init();
 }
 
 void GameRenderer::onDrawFrame() {
     clearBuffers();
+    camera->update();
+    bullets->update();
     enemy->update();
-    camera->update(); // Move camera update before player
     player->update();
+
 
     if (++frameCount >= readInterval) {
         frameCount = 0;
@@ -39,12 +46,14 @@ void GameRenderer::onDrawFrame() {
 void GameRenderer::onSurfaceChanged(int width, int height) {
     player->setRatio((float) height / (float) width);
     enemy->setScreenWidth(width);
+    bullets->setScreenWidth(width);
 }
 
 void GameRenderer::onDestroy() {
     player->destroy();
     enemy->destroy();
     reader->destroy();
+    bullets->destroy();
 }
 
 void GameRenderer::onMove(Move move) {

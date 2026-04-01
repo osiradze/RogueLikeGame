@@ -11,7 +11,6 @@
 #include "vbo/ISSBOBuffer.h"
 
 #define LOG_TAG "EnemyDebug"
-#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 
 void Enemy::initRender() {
     if (!data || !data->vertexData) return;
@@ -92,7 +91,7 @@ void Enemy::draw() const {
     glUseProgram(shaderProgram);
     auto cam = getCameraPosition();
     glUniform2f(renderUniforms.u_camera, cam.x, cam.y);
-    glUniform1f(renderUniforms.u_point_size, properties.radius * (float)properties.screenWidth);
+    glUniform1f(renderUniforms.u_point_size, properties.radius * (float)screenWidth);
     glBindVertexArray(vao);
     glDrawArrays(GL_POINTS, 0, properties.enemyCount);
     glBindVertexArray(0);

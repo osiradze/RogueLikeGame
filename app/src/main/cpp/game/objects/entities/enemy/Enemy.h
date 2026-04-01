@@ -17,7 +17,6 @@ struct EnemyProperties {
     int enemyCount = 5000;
     float radius = 0.02f;
     float size = 5.0;
-    int screenWidth = 1;
     float detectionRadius = 1.5f;
     float enemySpeed = 0.1f;
 };
@@ -27,7 +26,7 @@ public:
     void init() override;
     void update() override;
     void destroy() override;
-    void setScreenWidth(int width) { properties.screenWidth = width; }
+    void setScreenWidth(int width) { screenWidth = width; }
 
     explicit Enemy(
             IEnemyTarget* target,
@@ -55,6 +54,7 @@ private:
             "shaders/enemy/enemy_f.frag",
             "shaders/enemy/enemy_c.comp"
     };
+    int screenWidth = 1;
 
     IEnemyTarget* target;
     std::function<glm::vec3()> getCameraPosition;
