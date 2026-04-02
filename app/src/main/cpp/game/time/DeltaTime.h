@@ -10,6 +10,7 @@
 class DeltaTime {
 public:
     static float deltaTime;
+    static int fps;
 
     static void update();
 

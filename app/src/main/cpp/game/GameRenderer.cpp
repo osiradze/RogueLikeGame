@@ -52,6 +52,8 @@ void GameRenderer::onDrawFrame() {
         frameCount = 0;
         reader->read();
     }
+
+    DeltaTime::fps++;
 }
 
 void GameRenderer::onSurfaceChanged(int width, int height) {

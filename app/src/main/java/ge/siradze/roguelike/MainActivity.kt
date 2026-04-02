@@ -44,7 +44,7 @@ class MainActivity : ComponentActivity() {
             val fps = remember { mutableIntStateOf(0) }
             LaunchedEffect(Unit) {
                 while (true) {
-                    delay(2000)
+                    delay(1000)
                     fps.intValue = getFPS()
                 }
             }
