@@ -9,8 +9,8 @@
 #include "game/objects/entities/bullets/api/BulletsApi.h"
 
 struct BulletProperties {
-    // vertex attributes: position (x, y), velocity (x, y), color (r, g, b), isAlive
-    int numberOfFloatsPerVertex = 8;
+    // vertex attributes: position (x, y), velocity (x, y), color (r, g, b), isAlive, lifetime
+    int numberOfFloatsPerVertex = 9;
     int maxBullets = 50;
     float bulletRadius = 0.05f;
     float impactRadius = 0.1;

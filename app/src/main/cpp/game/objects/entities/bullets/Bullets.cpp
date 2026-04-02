@@ -23,6 +23,7 @@ std::unique_ptr<float[]> Bullets::getData() const {
         buffer[offset + 5] = 1.0f;            // g
         buffer[offset + 6] = 1.0f;            // b
         buffer[offset + 7] = 0.0f;            // isAlive
+        buffer[offset + 8] = 0.0f;            // lifetime
     }
 
     return buffer;

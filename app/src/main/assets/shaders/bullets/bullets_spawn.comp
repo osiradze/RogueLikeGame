@@ -22,6 +22,7 @@ void main() {
             bullets.data[index + 3u] = u_spawn_direction.y;
             // keep existing color (index+4..6)
             bullets.data[index + 7u] = 1.0; // isAlive = true
+            bullets.data[index + 8u] = 0.0; // reset lifetime
             return;
         }
     }
