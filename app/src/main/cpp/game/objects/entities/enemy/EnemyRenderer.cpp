@@ -33,26 +33,27 @@ void Enemy::initUniforms() {
     // compute uniforms
     computeUniforms.u_player_position   = glGetUniformLocation(computeProgram, "u_player_position");
     computeUniforms.u_delta_time        = glGetUniformLocation(computeProgram, "u_delta_time");
-    computeUniforms.u_enemy_count       = glGetUniformLocation(computeProgram, "u_enemy_count");
-    computeUniforms.u_collision_radius  = glGetUniformLocation(computeProgram, "u_collision_radius");
+    computeUniforms.u_read_ssbo_offset       = glGetUniformLocation(computeProgram, "u_ssbo_offset");
     computeUniforms.u_floats_per_vertex = glGetUniformLocation(computeProgram, "u_floats_per_vertex");
-    computeUniforms.u_bounds            = glGetUniformLocation(computeProgram, "u_bounds");
-    computeUniforms.u_ssbo_offset       = glGetUniformLocation(computeProgram, "u_ssbo_offset");
-    computeUniforms.u_detection_radius  = glGetUniformLocation(computeProgram, "u_detection_radius");
-    computeUniforms.u_enemy_speed       = glGetUniformLocation(computeProgram, "u_enemy_speed");
+
+    enemyUniform.u_enemy_count       = glGetUniformLocation(computeProgram, "u_enemy_count");
+    enemyUniform.u_collision_radius  = glGetUniformLocation(computeProgram, "u_collision_radius");
+    enemyUniform.u_bounds            = glGetUniformLocation(computeProgram, "u_bounds");
+    enemyUniform.u_detection_radius  = glGetUniformLocation(computeProgram, "u_detection_radius");
+    enemyUniform.u_enemy_speed       = glGetUniformLocation(computeProgram, "u_enemy_speed");
 
     bulletsUniforms.u_count             = glGetUniformLocation(computeProgram, "u_bullets.count");
     bulletsUniforms.u_floats_per_vertex = glGetUniformLocation(computeProgram, "u_bullets.floats_per_vertex");
     bulletsUniforms.u_impact_radius     = glGetUniformLocation(computeProgram, "u_bullets.impact_radius");
 
     glUseProgram(computeProgram);
-    glUniform1ui(computeUniforms.u_enemy_count, static_cast<unsigned int>(properties.enemyCount));
-    glUniform1f(computeUniforms.u_collision_radius, properties.radius * 2.0f);
+    glUniform1ui(enemyUniform.u_enemy_count, static_cast<unsigned int>(properties.enemyCount));
+    glUniform1f(enemyUniform.u_collision_radius, properties.radius * 2.0f);
     glUniform1ui(computeUniforms.u_floats_per_vertex, static_cast<unsigned int>(properties.numberOfFloatsPerVertex));
-    glUniform4f(computeUniforms.u_bounds, spawnBounds.x, spawnBounds.y, spawnBounds.z, spawnBounds.w);
-    glUniform1ui(computeUniforms.u_ssbo_offset, ssboOffset);
-    glUniform1f(computeUniforms.u_detection_radius, properties.detectionRadius);
-    glUniform1f(computeUniforms.u_enemy_speed, properties.enemySpeed);
+    glUniform4f(enemyUniform.u_bounds, spawnBounds.x, spawnBounds.y, spawnBounds.z, spawnBounds.w);
+    glUniform1ui(computeUniforms.u_read_ssbo_offset, ssboOffset);
+    glUniform1f(enemyUniform.u_detection_radius, properties.detectionRadius);
+    glUniform1f(enemyUniform.u_enemy_speed, properties.enemySpeed);
     glUseProgram(0);
 }
 

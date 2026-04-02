@@ -20,7 +20,7 @@ void main() {
 
 
     // Update position
-    current_position += velocity * u_delta_time;
+    current_position += velocity * u_delta_time * 0.4;
     inputOutput.data[index] = current_position.x;
     inputOutput.data[index + 1u] = current_position.y;
 

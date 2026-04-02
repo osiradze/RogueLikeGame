@@ -10,6 +10,7 @@
  #include "entities/IEnemyTarget.h"
 #include "game/objects/entities/bullets/api/BulletsApi.h"
 #include "entities/bullets/api/BulletUniforms.h"
+#include "EnemyUniforms.h"
 #include <glm/glm.hpp>
 
 struct EnemyProperties {
@@ -68,11 +69,12 @@ private:
     unsigned int vbo = 0;
 
     BulletsApi bulletsApi {};
-    BulletUniforms bulletsUniforms {};
-
 
     Uniforms renderUniforms;
     Uniforms computeUniforms;
+    EnemyUniforms enemyUniform {};
+    BulletUniforms bulletsUniforms {};
+
 
     ISSBOBuffer* reader;
     unsigned int ssboOffset = 0;
