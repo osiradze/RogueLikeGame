@@ -25,9 +25,14 @@ uniform vec4 u_bounds;
 uniform uint u_ssbo_offset;
 uniform float u_enemy_speed;
 
-uniform uint u_bullet_count;
-uniform uint u_bullet_floats_per_vertex;
-uniform float u_impact_radius;
+
+struct bullets {
+    uint count;
+    uint floats_per_vertex;
+    float impact_radius;
+};
+uniform bullets u_bullets;
+
 
 struct Quadrant {
     float id;
@@ -65,18 +70,17 @@ void main() {
         } else {
             velocity *= 0.96; // Damping to prevent infinite acceleration
         }
-
     }
 
 
     // React to bullets: if a bullet is within impactRadius, knock enemy away
-    for (uint b = 0u; b < u_bullet_count; b++) {
-        uint bi = b * u_bullet_floats_per_vertex;
+    for (uint b = 0u; b < u_bullets.count; b++) {
+        uint bi = b * u_bullets.floats_per_vertex;
         vec2 bulletPos = vec2(bulletData.bullets[bi], bulletData.bullets[bi + 1u]);
         vec2 diff = current_position - bulletPos;
         float d = length(diff);
-        if (d < u_impact_radius && d > 0.0001) {
-            velocity += (diff / d) * (u_impact_radius - d) * 5.0;
+        if (d < u_bullets.impact_radius && d > 0.0001) {
+            velocity += (diff / d) * (u_bullets.impact_radius - d) * 15.0;
         }
     }
 

@@ -18,8 +18,4 @@ struct Uniforms {
     int u_bounds            = -1;
     int u_ssbo_offset       = -1;
     int u_enemy_speed = -1;
-    int u_bullet_radius = -1;
-    int u_bullet_count = -1;
-    int u_bullet_floats_per_vertex = -1;
-    int u_impact_radius = -1;
 };

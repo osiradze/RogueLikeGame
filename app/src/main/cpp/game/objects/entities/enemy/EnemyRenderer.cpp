@@ -40,9 +40,10 @@ void Enemy::initUniforms() {
     computeUniforms.u_ssbo_offset       = glGetUniformLocation(computeProgram, "u_ssbo_offset");
     computeUniforms.u_detection_radius  = glGetUniformLocation(computeProgram, "u_detection_radius");
     computeUniforms.u_enemy_speed       = glGetUniformLocation(computeProgram, "u_enemy_speed");
-    computeUniforms.u_bullet_count             = glGetUniformLocation(computeProgram, "u_bullet_count");
-    computeUniforms.u_bullet_floats_per_vertex = glGetUniformLocation(computeProgram, "u_bullet_floats_per_vertex");
-    computeUniforms.u_impact_radius            = glGetUniformLocation(computeProgram, "u_impact_radius");
+
+    bulletsUniforms.u_count             = glGetUniformLocation(computeProgram, "u_bullets.count");
+    bulletsUniforms.u_floats_per_vertex = glGetUniformLocation(computeProgram, "u_bullets.floats_per_vertex");
+    bulletsUniforms.u_impact_radius     = glGetUniformLocation(computeProgram, "u_bullets.impact_radius");
 
     glUseProgram(computeProgram);
     glUniform1ui(computeUniforms.u_enemy_count, static_cast<unsigned int>(properties.enemyCount));
@@ -83,9 +84,9 @@ void Enemy::runCompute() {
             auto playerPosition = target->getPosition();
             glUniform2f(computeUniforms.u_player_position, playerPosition.x, playerPosition.y);
             glUniform1f(computeUniforms.u_delta_time, DeltaTime::deltaTime);
-            glUniform1ui(computeUniforms.u_bullet_count, static_cast<unsigned int>(bulletsApi.maxBullets));
-            glUniform1ui(computeUniforms.u_bullet_floats_per_vertex, static_cast<unsigned int>(bulletsApi.numberOfFloatsPerVertex));
-            glUniform1f(computeUniforms.u_impact_radius, bulletsApi.impactRadius);
+            glUniform1ui(bulletsUniforms.u_count, static_cast<unsigned int>(bulletsApi.maxBullets));
+            glUniform1ui(bulletsUniforms.u_floats_per_vertex, static_cast<unsigned int>(bulletsApi.numberOfFloatsPerVertex));
+            glUniform1f(bulletsUniforms.u_impact_radius, bulletsApi.impactRadius);
         },
         ssbos,
         3,

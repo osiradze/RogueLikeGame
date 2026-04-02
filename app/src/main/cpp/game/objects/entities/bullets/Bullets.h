@@ -6,7 +6,7 @@
 #include "base/GLObjectData.h"
 #include "shaders/ShadersPaths.h"
 #include "base/UniformLocations.h"
-#include "BulletsApi.h"
+#include "game/objects/entities/bullets/api/BulletsApi.h"
 
 struct BulletProperties {
     // vertex attributes: position (x, y), velocity (x, y), color (r, g, b)

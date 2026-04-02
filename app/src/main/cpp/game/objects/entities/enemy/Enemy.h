@@ -8,7 +8,8 @@
 #include "shaders/ShadersPaths.h"
 #include "vbo/ISSBOBuffer.h"
  #include "entities/IEnemyTarget.h"
-#include "entities/bullets/BulletsApi.h"
+#include "game/objects/entities/bullets/api/BulletsApi.h"
+#include "entities/bullets/api/BulletUniforms.h"
 #include <glm/glm.hpp>
 
 struct EnemyProperties {
@@ -65,7 +66,10 @@ private:
     unsigned int computeProgram {};
     unsigned int vao = 0;
     unsigned int vbo = 0;
+
     BulletsApi bulletsApi {};
+    BulletUniforms bulletsUniforms {};
+
 
     Uniforms renderUniforms;
     Uniforms computeUniforms;
@@ -83,3 +87,4 @@ private:
     void draw() const;
     void handleReadData(std::vector<float> data);
 };
+
