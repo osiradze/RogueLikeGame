@@ -1,0 +1,29 @@
+#version 310 es
+precision highp float;
+
+layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+
+layout (std430, binding = 0) buffer BulletBuffer {
+    float data[];
+} bullets;
+
+uniform vec2  u_spawn_position;
+uniform vec2  u_spawn_direction;
+uniform uint  u_floats_per_vertex;
+uniform uint  u_bullet_count;
+
+void main() {
+    for (uint i = 0u; i < u_bullet_count; i++) {
+        uint index = i * u_floats_per_vertex;
+        if (bullets.data[index + 7u] < 0.5) {
+            bullets.data[index + 0u] = u_spawn_position.x;
+            bullets.data[index + 1u] = u_spawn_position.y;
+            bullets.data[index + 2u] = u_spawn_direction.x;
+            bullets.data[index + 3u] = u_spawn_direction.y;
+            // keep existing color (index+4..6)
+            bullets.data[index + 7u] = 1.0; // isAlive = true
+            return;
+        }
+    }
+}
+

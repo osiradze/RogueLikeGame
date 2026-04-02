@@ -12,15 +12,21 @@ uniform uint u_floats_per_vertex;
 
 
 void main() {
-
     uint id = gl_WorkGroupID.x;
     uint index = id * u_floats_per_vertex;
+
+    // Check if the bullet is active
+    if(inputOutput.data[index + 7u] < 0.5) {
+        return;
+    }
+
+
     vec2 current_position = vec2(inputOutput.data[index], inputOutput.data[index + 1u]);
     vec2 velocity = vec2(inputOutput.data[index + 2u], inputOutput.data[index + 3u]);
 
 
     // Update position
-    current_position += velocity * u_delta_time * 0.4;
+    current_position += velocity * u_delta_time;
     inputOutput.data[index] = current_position.x;
     inputOutput.data[index + 1u] = current_position.y;
 

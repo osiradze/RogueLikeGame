@@ -17,11 +17,12 @@ std::unique_ptr<float[]> Bullets::getData() const {
         float angle = angleDist(rng);
         buffer[offset + 0] = 0.0f;            // x
         buffer[offset + 1] = 0.0f;            // y
-        buffer[offset + 2] = std::cos(angle); // vx (normalized direction)
-        buffer[offset + 3] = std::sin(angle); // vy (normalized direction)
+        buffer[offset + 2] = 0.0;             // vx (normalized direction)
+        buffer[offset + 3] = 0.0;             // vy (normalized direction)
         buffer[offset + 4] = 1.0f;            // r
         buffer[offset + 5] = 1.0f;            // g
         buffer[offset + 6] = 1.0f;            // b
+        buffer[offset + 7] = 0.0f;            // isAlive
     }
 
     return buffer;

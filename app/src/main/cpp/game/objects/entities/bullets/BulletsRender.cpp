@@ -17,9 +17,11 @@ void Bullets::initRender() {
     if (!data || !data->vertexData) return;
 
     // init render program
-    if (!OpenglUtils::createProgram(shaderProgram, shaders.vertexShader.c_str(),shaders.fragmentShader.c_str())) { return; }
-    // init compute program
+    if (!OpenglUtils::createProgram(shaderProgram, shaders.vertexShader.c_str(), shaders.fragmentShader.c_str())) { return; }
+    // init update compute program
     if (!OpenglUtils::createComputeProgram(computeProgram, shaders.computeShader.c_str())) { return; }
+    // init spawn compute program
+    if (!OpenglUtils::createComputeProgram(spawnProgram, spawnShaderPath.c_str())) { return; }
 
     initUniforms();
     initData();
@@ -32,6 +34,7 @@ void Bullets::initUniforms() {
     renderUniforms.u_camera     = glGetUniformLocation(shaderProgram, "u_camera");
     renderUniforms.u_point_size = glGetUniformLocation(shaderProgram, "u_point_size");
 
+    // update compute uniforms
     computeUniforms.u_delta_time        = glGetUniformLocation(computeProgram, "u_delta_time");
     computeUniforms.u_floats_per_vertex = glGetUniformLocation(computeProgram, "u_floats_per_vertex");
 
@@ -39,7 +42,16 @@ void Bullets::initUniforms() {
     glUniform1ui(computeUniforms.u_floats_per_vertex, static_cast<unsigned int>(properties.numberOfFloatsPerVertex));
     glUseProgram(0);
 
+    // spawn compute uniforms
+    spawnUniforms.u_spawn_position    = glGetUniformLocation(spawnProgram, "u_spawn_position");
+    spawnUniforms.u_spawn_direction   = glGetUniformLocation(spawnProgram, "u_spawn_direction");
+    spawnUniforms.u_floats_per_vertex = glGetUniformLocation(spawnProgram, "u_floats_per_vertex");
+    spawnUniforms.u_bullet_count      = glGetUniformLocation(spawnProgram, "u_bullet_count");
 
+    glUseProgram(spawnProgram);
+    glUniform1ui(spawnUniforms.u_floats_per_vertex, static_cast<unsigned int>(properties.numberOfFloatsPerVertex));
+    glUniform1ui(spawnUniforms.u_bullet_count, static_cast<unsigned int>(properties.maxBullets));
+    glUseProgram(0);
 }
 
 void Bullets::initData() {
@@ -72,6 +84,20 @@ void Bullets::runCompute() {
             ssbos,
             1,
             properties.maxBullets, 1, 1
+    );
+}
+
+void Bullets::spawn(glm::vec2 position, glm::vec2 direction) {
+    unsigned int ssbos[] = { vbo };
+    ShaderUtil::computeShader(
+            spawnProgram,
+            [this, position, direction]() {
+                glUniform2f(spawnUniforms.u_spawn_position, position.x, position.y);
+                glUniform2f(spawnUniforms.u_spawn_direction, direction.x, direction.y);
+            },
+            ssbos,
+            1,
+            1, 1, 1   // single workgroup — shader loops over all bullets
     );
 }
 

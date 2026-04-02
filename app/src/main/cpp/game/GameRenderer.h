@@ -7,6 +7,7 @@
 #include "entities/camera/Camera.h"
 #include "vbo/SSBOReader.h"
 #include "entities/bullets/Bullets.h"
+#include "time/DeltaTime.h"
 
 class GameRenderer {
 public:
@@ -32,6 +33,9 @@ private:
 
     int readInterval = 2; // read every Nth frame
     int frameCount   = 0;
+
+    float bulletTimer    = 0.0f;
+    float bulletInterval = 3.0f; // seconds between bullet spawns
 
 
 

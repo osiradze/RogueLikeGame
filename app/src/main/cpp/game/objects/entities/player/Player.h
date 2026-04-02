@@ -40,6 +40,11 @@ public:
     [[nodiscard]] glm::vec3 getPosition() const override;
     void inCollision() override;
 
+    [[nodiscard]] glm::vec2 getAimDirection() const {
+        if (glm::length(aimDirection) < 0.0001f) return glm::vec2(0.0f, 1.0f);
+        return glm::normalize(glm::vec2(aimDirection.x, aimDirection.y));
+    }
+
     std::function<glm::vec3()> getPositionFunction() {
         return [this]() { return getPosition(); };
     }

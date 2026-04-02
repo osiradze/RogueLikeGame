@@ -9,11 +9,18 @@
 #include "game/objects/entities/bullets/api/BulletsApi.h"
 
 struct BulletProperties {
-    // vertex attributes: position (x, y), velocity (x, y), color (r, g, b)
-    int numberOfFloatsPerVertex = 7;
+    // vertex attributes: position (x, y), velocity (x, y), color (r, g, b), isAlive
+    int numberOfFloatsPerVertex = 8;
     int maxBullets = 50;
-    float bulletRadius = 0.01f;
+    float bulletRadius = 0.05f;
     float impactRadius = 0.1;
+};
+
+struct BulletSpawnUniforms {
+    int u_spawn_position    = -1;
+    int u_spawn_direction   = -1;
+    int u_floats_per_vertex = -1;
+    int u_bullet_count      = -1;
 };
 
 class Bullets: public GameObject {
@@ -21,6 +28,8 @@ public:
     void init() override;
 
     void update() override;
+
+    void spawn(glm::vec2 position, glm::vec2 direction);
 
     void setScreenWidth(int width) { screenWidth = width; }
 
@@ -56,15 +65,18 @@ private:
             "shaders/bullets/bullets_f.frag",
             "shaders/bullets/bullets_c.comp"
     };
+    std::string spawnShaderPath = "shaders/bullets/bullets_spawn.comp";
     int screenWidth = 1;
 
     unsigned int shaderProgram {};
     unsigned int computeProgram {};
+    unsigned int spawnProgram {};
     unsigned int vao = 0;
     unsigned int vbo = 0;
 
     Uniforms renderUniforms;
     Uniforms computeUniforms;
+    BulletSpawnUniforms spawnUniforms;
 
     std::function<glm::vec3()> getCameraPosition;
 

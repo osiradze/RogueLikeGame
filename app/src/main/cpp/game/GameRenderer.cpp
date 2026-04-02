@@ -40,6 +40,13 @@ void GameRenderer::onDrawFrame() {
     enemy->update();
     player->update();
 
+    bulletTimer += DeltaTime::deltaTime;
+    if (bulletTimer >= bulletInterval) {
+        bulletTimer = 0.0f;
+        auto pos = player->getPosition();
+        auto dir = player->getAimDirection();
+        bullets->spawn(glm::vec2(pos.x, pos.y), dir);
+    }
 
     if (++frameCount >= readInterval) {
         frameCount = 0;
