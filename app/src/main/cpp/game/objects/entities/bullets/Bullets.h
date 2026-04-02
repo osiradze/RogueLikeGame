@@ -7,20 +7,15 @@
 #include "shaders/ShadersPaths.h"
 #include "base/UniformLocations.h"
 #include "game/objects/entities/bullets/api/BulletsApi.h"
+#include "entities/bullets/api/BulletUniforms.h"
 
 struct BulletProperties {
     // vertex attributes: position (x, y), velocity (x, y), color (r, g, b), isAlive, lifetime
     int numberOfFloatsPerVertex = 9;
     int maxBullets = 50;
     float bulletRadius = 0.05f;
-    float impactRadius = 0.1;
-};
-
-struct BulletSpawnUniforms {
-    int u_spawn_position    = -1;
-    int u_spawn_direction   = -1;
-    int u_floats_per_vertex = -1;
-    int u_bullet_count      = -1;
+    float impactRadius = 0.1f;
+    float bulletSpeed = 1.5f;
 };
 
 class Bullets: public GameObject {
@@ -76,7 +71,7 @@ private:
 
     Uniforms renderUniforms;
     Uniforms computeUniforms;
-    BulletSpawnUniforms spawnUniforms;
+    BulletUniforms bulletUniforms;
 
     std::function<glm::vec3()> getCameraPosition;
 

@@ -37,20 +37,22 @@ void Bullets::initUniforms() {
     // update compute uniforms
     computeUniforms.u_delta_time        = glGetUniformLocation(computeProgram, "u_delta_time");
     computeUniforms.u_floats_per_vertex = glGetUniformLocation(computeProgram, "u_floats_per_vertex");
+    bulletUniforms.u_bullet_speed      = glGetUniformLocation(computeProgram, "u_bullet_speed");
 
     glUseProgram(computeProgram);
     glUniform1ui(computeUniforms.u_floats_per_vertex, static_cast<unsigned int>(properties.numberOfFloatsPerVertex));
+    glUniform1f(bulletUniforms.u_bullet_speed, properties.bulletSpeed);
     glUseProgram(0);
 
     // spawn compute uniforms
-    spawnUniforms.u_spawn_position    = glGetUniformLocation(spawnProgram, "u_spawn_position");
-    spawnUniforms.u_spawn_direction   = glGetUniformLocation(spawnProgram, "u_spawn_direction");
-    spawnUniforms.u_floats_per_vertex = glGetUniformLocation(spawnProgram, "u_floats_per_vertex");
-    spawnUniforms.u_bullet_count      = glGetUniformLocation(spawnProgram, "u_bullet_count");
+    bulletUniforms.u_spawn_position    = glGetUniformLocation(spawnProgram, "u_spawn_position");
+    bulletUniforms.u_spawn_direction   = glGetUniformLocation(spawnProgram, "u_spawn_direction");
+    bulletUniforms.u_floats_per_vertex = glGetUniformLocation(spawnProgram, "u_floats_per_vertex");
+    bulletUniforms.u_bullet_count      = glGetUniformLocation(spawnProgram, "u_bullet_count");
 
     glUseProgram(spawnProgram);
-    glUniform1ui(spawnUniforms.u_floats_per_vertex, static_cast<unsigned int>(properties.numberOfFloatsPerVertex));
-    glUniform1ui(spawnUniforms.u_bullet_count, static_cast<unsigned int>(properties.maxBullets));
+    glUniform1ui(bulletUniforms.u_floats_per_vertex, static_cast<unsigned int>(properties.numberOfFloatsPerVertex));
+    glUniform1ui(bulletUniforms.u_bullet_count, static_cast<unsigned int>(properties.maxBullets));
     glUseProgram(0);
 }
 
@@ -94,8 +96,8 @@ void Bullets::spawn(glm::vec2 position, glm::vec2 direction) {
     ShaderUtil::computeShader(
             spawnProgram,
             [this, position, direction]() {
-                glUniform2f(spawnUniforms.u_spawn_position, position.x, position.y);
-                glUniform2f(spawnUniforms.u_spawn_direction, direction.x, direction.y);
+                glUniform2f(bulletUniforms.u_spawn_position, position.x, position.y);
+                glUniform2f(bulletUniforms.u_spawn_direction, direction.x, direction.y);
             },
             ssbos,
             1,

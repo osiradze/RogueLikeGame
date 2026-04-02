@@ -9,6 +9,7 @@ layout (std430, binding = 0) buffer InputOutputBuffer {
 
 uniform float u_delta_time;
 uniform uint u_floats_per_vertex;
+uniform float u_bullet_speed;
 
 
 void main() {
@@ -34,8 +35,8 @@ void main() {
     vec2 velocity = vec2(inputOutput.data[index + 2u], inputOutput.data[index + 3u]);
 
 
-    // Update position
-    current_position += velocity * u_delta_time;
+    // Update position — direction from stored velocity, speed from uniform
+    current_position += normalize(velocity) * u_bullet_speed * u_delta_time;
     inputOutput.data[index] = current_position.x;
     inputOutput.data[index + 1u] = current_position.y;
 
