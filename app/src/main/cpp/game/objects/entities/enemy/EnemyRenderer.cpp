@@ -40,6 +40,9 @@ void Enemy::initUniforms() {
     computeUniforms.u_ssbo_offset       = glGetUniformLocation(computeProgram, "u_ssbo_offset");
     computeUniforms.u_detection_radius  = glGetUniformLocation(computeProgram, "u_detection_radius");
     computeUniforms.u_enemy_speed       = glGetUniformLocation(computeProgram, "u_enemy_speed");
+    computeUniforms.u_bullet_count             = glGetUniformLocation(computeProgram, "u_bullet_count");
+    computeUniforms.u_bullet_floats_per_vertex = glGetUniformLocation(computeProgram, "u_bullet_floats_per_vertex");
+    computeUniforms.u_impact_radius            = glGetUniformLocation(computeProgram, "u_impact_radius");
 
     glUseProgram(computeProgram);
     glUniform1ui(computeUniforms.u_enemy_count, static_cast<unsigned int>(properties.enemyCount));
@@ -73,16 +76,19 @@ void Enemy::initData() {
 }
 
 void Enemy::runCompute() {
-    unsigned int ssbos[] = { vbo, reader->getSSBO() };
+    unsigned int ssbos[] = { vbo, reader->getSSBO(), bulletsApi.vbo };
     ShaderUtil::computeShader(
         computeProgram,
         [this]() {
             auto playerPosition = target->getPosition();
             glUniform2f(computeUniforms.u_player_position, playerPosition.x, playerPosition.y);
             glUniform1f(computeUniforms.u_delta_time, DeltaTime::deltaTime);
+            glUniform1ui(computeUniforms.u_bullet_count, static_cast<unsigned int>(bulletsApi.maxBullets));
+            glUniform1ui(computeUniforms.u_bullet_floats_per_vertex, static_cast<unsigned int>(bulletsApi.numberOfFloatsPerVertex));
+            glUniform1f(computeUniforms.u_impact_radius, bulletsApi.impactRadius);
         },
         ssbos,
-        2,
+        3,
         properties.enemyCount, 1, 1
     );
 }

@@ -27,6 +27,10 @@ void GameRenderer::onSurfaceCreated() {
     enemy->init();
     reader->init();
     bullets->init();
+
+    enemy->setBulletsApi(
+        bullets->getApi()
+    );
 }
 
 void GameRenderer::onDrawFrame() {

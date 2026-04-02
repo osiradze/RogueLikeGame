@@ -8,6 +8,7 @@
 #include "shaders/ShadersPaths.h"
 #include "vbo/ISSBOBuffer.h"
  #include "entities/IEnemyTarget.h"
+#include "entities/bullets/BulletsApi.h"
 #include <glm/glm.hpp>
 
 struct EnemyProperties {
@@ -27,6 +28,7 @@ public:
     void update() override;
     void destroy() override;
     void setScreenWidth(int width) { screenWidth = width; }
+    void setBulletsApi(BulletsApi api) { bulletsApi = api; }
 
     explicit Enemy(
             IEnemyTarget* target,
@@ -63,6 +65,7 @@ private:
     unsigned int computeProgram {};
     unsigned int vao = 0;
     unsigned int vbo = 0;
+    BulletsApi bulletsApi {};
 
     Uniforms renderUniforms;
     Uniforms computeUniforms;

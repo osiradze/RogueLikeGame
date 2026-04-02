@@ -6,6 +6,7 @@
 #include "base/GLObjectData.h"
 #include "shaders/ShadersPaths.h"
 #include "base/UniformLocations.h"
+#include "BulletsApi.h"
 
 struct BulletProperties {
     // vertex attributes: position (x, y), velocity (x, y), color (r, g, b)
@@ -22,6 +23,15 @@ public:
     void update() override;
 
     void setScreenWidth(int width) { screenWidth = width; }
+
+    BulletsApi getApi() {
+        return BulletsApi {
+            vbo,
+            properties.numberOfFloatsPerVertex,
+            properties.maxBullets,
+            properties.impactRadius
+        };
+    }
 
     void destroy() override;
 
