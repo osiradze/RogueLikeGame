@@ -31,12 +31,14 @@ A **rogue-like top-down shooter** built entirely from scratch on **Android** usi
 
 ## 🎥 Gameplay Preview
 
-> **[▶️ Click here to watch the gameplay video](images/gameplay.mp4)**
+> **[▶️ Click here to watch small the gameplay video](images/gameplay.mp4)**
 
 <p align="center">
-  <img src="images/1.png" alt="Game Screenshot" width="400"/>
-  <img src="images/2.png" alt="Game Screenshot" width="400"/>
-  <img src="images/3.png" alt="Game Screenshot" width="400"/>
+  <img src="images/1.png" alt="Game Screenshot" width="200"/>
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="images/2.png" alt="Game Screenshot" width="200"/>
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="images/3.png" alt="Game Screenshot" width="200"/>
 </p>
 
 ---
