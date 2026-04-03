@@ -35,7 +35,7 @@ private:
     int frameCount   = 0;
 
     float bulletTimer    = 0.0f;
-    float bulletInterval = 1.0f; // seconds between bullet spawns
+    float bulletInterval = 0.5f; // seconds between bullet spawns
 
 
 

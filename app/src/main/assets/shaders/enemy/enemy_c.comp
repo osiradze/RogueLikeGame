@@ -39,7 +39,7 @@ struct Quadrant {
     vec4 bounds;
 };
 
-vec2 collisionByQuadrant(uint id,uint index, float qId, vec2 enemy_position);
+void collisionByQuadrant(uint id,uint index, float qId);
 Quadrant getQuadrant(vec2 position, vec4 bounds);
 void calculateQuadrant(uint index, vec2 enemy_position);
 
@@ -54,18 +54,13 @@ void main() {
 
     // Separate from other enemies by pushing position
     float qId = inputOutput.data[index + 5u];
-    current_position = collisionByQuadrant(id, index, qId, current_position);
 
     // Chase player only if within detection radius
     vec2 toPlayer = u_player_position - current_position;
     float dist = length(toPlayer);
     vec2 dir = (toPlayer / dist) * u_enemy_speed;
     if (dist < u_detection_radius) {
-        if(dist < u_collision_radius) {
-            uint isTouchingIndex = u_ssbo_offset;
-            readOutput.read[isTouchingIndex] = 1.0;
-            velocity = -dir * 20.0;
-        } else if(length(velocity) < 0.1) {
+       if(length(velocity) < 0.1) {
             velocity = dir;
         } else {
             velocity *= 0.96; // Damping to prevent infinite acceleration
@@ -91,13 +86,17 @@ void main() {
     inputOutput.data[index + 2u] = velocity.x;
     inputOutput.data[index + 3u] = velocity.y;
 
+    collisionByQuadrant(id, index, qId);
+    current_position = vec2(inputOutput.data[index], inputOutput.data[index + 1u]);
+
+
+
     //calculate area
     calculateQuadrant(id, current_position);
 
 }
 
-vec2 collisionByQuadrant(uint id,uint index, float qId, vec2 current_position){
-    vec2 updated_position = current_position;
+void collisionByQuadrant(uint id,uint index, float qId) {
     // Separate from other enemies by pushing position
     for (uint i = 0u; i < u_enemy_count; i++) {
         if (i == id) continue;
@@ -106,15 +105,17 @@ vec2 collisionByQuadrant(uint id,uint index, float qId, vec2 current_position){
         if (otherQId != qId) {
             continue;
         }
+        vec2 current_position = vec2(inputOutput.data[index], inputOutput.data[index + 1u]);
         vec2 other_position = vec2(inputOutput.data[otherIndex], inputOutput.data[otherIndex + 1u]);
         vec2 diff = current_position - other_position;
         float d = length(diff);
-        if (d < u_collision_radius && d > 0.0001) {
+        if (d < u_collision_radius) {
             float overlap = (u_collision_radius - d) * 0.5;
-            updated_position += (diff / d) * overlap;
+            vec2 updated_position = current_position + (diff / d) * overlap;
+            inputOutput.data[index] = updated_position.x;
+            inputOutput.data[index + 1u] = updated_position.y;
         }
     }
-    return updated_position;
 }
 
 
