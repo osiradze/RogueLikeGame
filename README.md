@@ -4,10 +4,6 @@
   <img src="images/1.png" alt="RogueLike Gameplay Screenshot" width="320"/>
 </p>
 
-<p align="center">
-  <a href="images/gameplay.mp4">▶️ Watch Gameplay Video</a>
-</p>
-
 ---
 
 A **rogue-like top-down shooter** built entirely from scratch on **Android** using **OpenGL ES 3.0** and **C++ (NDK)**. We got OpenGL, compute shaders, and custom game architecture.
@@ -29,9 +25,11 @@ A **rogue-like top-down shooter** built entirely from scratch on **Android** usi
 
 ---
 
-## 🎥 Gameplay Preview
+## 🎥 Gameplay
 
-> **[▶️ Click here to watch small the gameplay video](images/gameplay.mp4)**
+<p align="center">
+  <img src="images/gameplay.webp" alt="Gameplay"/>
+</p>
 
 <p align="center">
   <img src="images/1.png" alt="Game Screenshot" width="200"/>
