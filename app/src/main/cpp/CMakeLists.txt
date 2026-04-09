@@ -40,6 +40,9 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
         game/objects/entities/enemy/EnemyRenderer.cpp
         game/objects/entities/bullets/Bullets.cpp
         game/objects/entities/bullets/BulletsRender.cpp
+        game/objects/entities/fortress/Fortress.cpp
+        game/objects/entities/fortress/FortressGenerator.cpp
+        game/objects/entities/fortress/FortressRenderer.cpp
         game/utils/OpenglUtils.cpp
         game/utils/ShaderUtil.cpp
         game/vbo/SSBOReader.cpp

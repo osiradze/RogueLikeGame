@@ -8,11 +8,9 @@
 #include "utils/OpenglUtils.h"
 #include "utils/ShaderUtil.h"
 #include "time/DeltaTime.h"
-#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, LOG_TAG, __VA_ARGS__)
 
 
 void Bullets::initRender() {
-    __android_log_print(ANDROID_LOG_DEBUG, "Bullets", "Start");
 
     if (!data || !data->vertexData) return;
 
@@ -26,7 +24,6 @@ void Bullets::initRender() {
     initUniforms();
     initData();
     data.reset();
-    __android_log_print(ANDROID_LOG_DEBUG, "Bullets", "Success");
 }
 
 void Bullets::initUniforms() {

@@ -8,6 +8,7 @@
 #include "vbo/SSBOReader.h"
 #include "entities/bullets/Bullets.h"
 #include "time/DeltaTime.h"
+#include "entities/fortress/Fortress.h"
 
 class GameRenderer {
 public:
@@ -28,6 +29,7 @@ private:
     std::unique_ptr<Player> player;
     std::unique_ptr<Enemy> enemy;
     std::unique_ptr<Bullets> bullets;
+    std::unique_ptr<Fortress> fortress;
     std::unique_ptr<Camera> camera;
     std::unique_ptr<SSBOReader> reader;
 
@@ -35,7 +37,7 @@ private:
     int frameCount   = 0;
 
     float bulletTimer    = 0.0f;
-    float bulletInterval = 0.5f; // seconds between bullet spawns
+    float bulletInterval = 1.0f; // seconds between bullet spawns
 
 
 

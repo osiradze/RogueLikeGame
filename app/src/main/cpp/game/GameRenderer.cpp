@@ -24,9 +24,14 @@ void GameRenderer::onSurfaceCreated() {
             camera->getPositionFunction(),
             reader.get()
     );
+    fortress = std::make_unique<Fortress>(
+            camera->getPositionFunction()
+    );
     enemy->init();
     reader->init();
     bullets->init();
+    fortress->init();
+
 
     enemy->setBulletsApi(
         bullets->getApi()
@@ -39,6 +44,7 @@ void GameRenderer::onDrawFrame() {
     bullets->update();
     enemy->update();
     player->update();
+    fortress->update();
 
     bulletTimer += DeltaTime::deltaTime;
     if (bulletTimer >= bulletInterval) {
@@ -60,6 +66,7 @@ void GameRenderer::onSurfaceChanged(int width, int height) {
     player->setRatio((float) height / (float) width);
     enemy->setScreenWidth(width);
     bullets->setScreenWidth(width);
+    fortress->setScreenWidth(width);
 }
 
 void GameRenderer::onDestroy() {
@@ -67,6 +74,7 @@ void GameRenderer::onDestroy() {
     enemy->destroy();
     reader->destroy();
     bullets->destroy();
+    fortress->destroy();
 }
 
 void GameRenderer::onMove(Move move) {
