@@ -27,6 +27,7 @@ public:
     void spawn(glm::vec2 position, glm::vec2 direction);
 
     void setScreenWidth(int width) { screenWidth = width; }
+    void setRatio(float r) override;
 
     BulletsApi getApi() {
         return BulletsApi {
@@ -62,6 +63,7 @@ private:
     };
     std::string spawnShaderPath = "shaders/bullets/bullets_spawn.comp";
     int screenWidth = 1;
+    float ratio = 1.0f;
 
     unsigned int shaderProgram {};
     unsigned int computeProgram {};

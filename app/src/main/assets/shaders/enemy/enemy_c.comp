@@ -61,11 +61,10 @@ void main() {
     vec2 dir = (toPlayer / dist) * u_enemy_speed;
     if (dist < u_detection_radius) {
        if(length(velocity) < 0.1) {
-            velocity = dir;
-        } else {
-            velocity *= 0.96; // Damping to prevent infinite acceleration
+            velocity = -dir * 2.0;
         }
     }
+
 
 
     // React to bullets: if a bullet is within impactRadius, knock enemy away
@@ -80,11 +79,13 @@ void main() {
     }
 
     // Update position
+    velocity *= 0.95;
     current_position += velocity * u_delta_time;
     inputOutput.data[index] = current_position.x;
     inputOutput.data[index + 1u] = current_position.y;
     inputOutput.data[index + 2u] = velocity.x;
     inputOutput.data[index + 3u] = velocity.y;
+
 
     collisionByQuadrant(id, index, qId);
     current_position = vec2(inputOutput.data[index], inputOutput.data[index + 1u]);

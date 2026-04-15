@@ -26,6 +26,8 @@ void Player::update() {
 void Player::setRatio(float ratio) {
     playerTranslation.setRatio(ratio);
     aimTranslation.setRatio(ratio);
+    aimRenderer.setRatio(ratio);
+    lineRenderer.setRatio(ratio);
 }
 
 void Player::destroy() {

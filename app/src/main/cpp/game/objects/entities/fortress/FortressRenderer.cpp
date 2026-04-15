@@ -23,6 +23,7 @@ void Fortress::initUniforms() {
     // render uniforms
     renderUniforms.u_camera     = glGetUniformLocation(shaderProgram, "u_camera");
     renderUniforms.u_point_size = glGetUniformLocation(shaderProgram, "u_point_size");
+    renderUniforms.u_ratio      = glGetUniformLocation(shaderProgram, "u_ratio");
 }
 
 void Fortress::initRenderData() {
@@ -50,6 +51,7 @@ void Fortress::draw() const {
     auto cam = getCameraPosition();
     glUniform2f(renderUniforms.u_camera, cam.x, cam.y);
     glUniform1f(renderUniforms.u_point_size, properties.pointRadius * (float)screenWidth);
+    glUniform1f(renderUniforms.u_ratio, ratio);
     glBindVertexArray(vao);
     glDrawArrays(GL_POINTS, 0, properties.pointCount);
     glBindVertexArray(0);
@@ -64,5 +66,9 @@ void Fortress::destroy() {
 
 void Fortress::setRatio(float r) {
     ratio = r;
+    glUseProgram(shaderProgram);
+    glUniform1f(renderUniforms.u_ratio, ratio);
+    glUseProgram(0);
+
 }
 

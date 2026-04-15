@@ -18,6 +18,7 @@ void AimRenderer::init() {
 void AimRenderer::initUniforms() {
     uniforms.u_model  = glGetUniformLocation(shaderProgram, "u_model");
     uniforms.u_camera = glGetUniformLocation(shaderProgram, "u_camera");
+    uniforms.u_ratio  = glGetUniformLocation(shaderProgram, "u_ratio");
 }
 
 void AimRenderer::initData() {
@@ -54,6 +55,7 @@ void AimRenderer::updateData() {
     glUniformMatrix4fv(uniforms.u_model, 1, GL_FALSE, glm::value_ptr(getModel()));
     auto cam = getCameraPosition();
     glUniform2f(uniforms.u_camera, cam.x, cam.y);
+    glUniform1f(uniforms.u_ratio, ratio);
 }
 
 void AimRenderer::destroy() {
@@ -63,4 +65,11 @@ void AimRenderer::destroy() {
     glDeleteBuffers(1, &vbo);
     glDeleteBuffers(1, &ebo);
     glDeleteProgram(shaderProgram);
+}
+
+void AimRenderer::setRatio(float r) {
+    ratio = r;
+    glUseProgram(shaderProgram);
+    glUniform1f(uniforms.u_ratio, ratio);
+    glUseProgram(0);
 }

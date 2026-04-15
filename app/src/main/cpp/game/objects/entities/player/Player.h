@@ -16,7 +16,7 @@
 #include "entities/IEnemyTarget.h"
 
 struct PlayerProperties {
-    float speed = 0.05;
+    float speed = 0.02;
     float playerSize = 0.03;
     float aimDistance = 0.3;
     float aimSize = 0.02;

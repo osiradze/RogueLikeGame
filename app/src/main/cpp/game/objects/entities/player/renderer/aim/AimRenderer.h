@@ -14,6 +14,7 @@ public:
     void init();
     void draw();
     void destroy();
+    void setRatio(float r);
 
     explicit AimRenderer(std::function<glm::mat4()> getModel, std::function<glm::vec3()> getCameraPosition)
         : getModel(std::move(getModel)), getCameraPosition(std::move(getCameraPosition)) {}
@@ -27,6 +28,7 @@ private:
 
     std::function<glm::mat4()> getModel;
     std::function<glm::vec3()> getCameraPosition;
+    float ratio = 1.0f;
 
     unsigned int  shaderProgram {};
     unsigned int vao = 0;

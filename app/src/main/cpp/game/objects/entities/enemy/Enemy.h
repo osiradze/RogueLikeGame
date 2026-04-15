@@ -17,10 +17,10 @@ struct EnemyProperties {
     // position 2 - x,y, velocity 2 - vx vy, chasing - 1, in area
     // x, y, vx, vy, stopper, i, r, g, b
     int numberOfFloatsPerVertex = 9;
-    int enemyCount = 4000;
+    int enemyCount = 3000;
     float radius = 0.01f;
-    float size = 4.0;
-    float detectionRadius = 4.0f;
+    float size = 2.0; // word size
+    float detectionRadius = 0.1f;
     float enemySpeed = 0.1f;
 };
 
@@ -31,6 +31,7 @@ public:
     void destroy() override;
     void setScreenWidth(int width) { screenWidth = width; }
     void setBulletsApi(BulletsApi api) { bulletsApi = api; }
+    void setRatio(float r) override;
 
     explicit Enemy(
             IEnemyTarget* target,
@@ -59,6 +60,7 @@ private:
             "shaders/enemy/enemy_c.comp"
     };
     int screenWidth = 1;
+    float ratio = 1.0f;
 
     IEnemyTarget* target;
     std::function<glm::vec3()> getCameraPosition;

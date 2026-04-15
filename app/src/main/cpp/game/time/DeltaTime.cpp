@@ -6,6 +6,7 @@
 #include <jni.h>
 
 float DeltaTime::deltaTime = 0.0f;
+float DeltaTime::totalTime = 0.0f;
 std::chrono::high_resolution_clock::time_point DeltaTime::lastTime;
 
 int DeltaTime::fps = 0;
@@ -16,6 +17,7 @@ void DeltaTime::update() {
     if (lastTime.time_since_epoch().count() != 0) {
         std::chrono::duration<float> elapsed = now - lastTime;
         deltaTime = elapsed.count();
+        totalTime += deltaTime;
     } else {
         deltaTime = 0.0f;
     }

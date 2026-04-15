@@ -29,7 +29,6 @@ private:
     std::unique_ptr<Player> player;
     std::unique_ptr<Enemy> enemy;
     std::unique_ptr<Bullets> bullets;
-    std::unique_ptr<Fortress> fortress;
     std::unique_ptr<Camera> camera;
     std::unique_ptr<SSBOReader> reader;
 

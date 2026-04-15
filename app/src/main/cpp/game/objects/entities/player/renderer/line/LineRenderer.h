@@ -14,6 +14,7 @@ public:
     void init();
     void draw();
     void destroy();
+    void setRatio(float r);
 
     explicit LineRenderer(
             std::function<glm::vec3()> getPlayerPosition,
@@ -35,6 +36,7 @@ private:
     std::function<glm::vec3()> getPlayerPosition;
     std::function<glm::vec3()> getAimPosition;
     std::function<glm::vec3()> getCameraPosition;
+    float ratio = 1.0f;
 
     unsigned int  shaderProgram {};
     unsigned int vao = 0;

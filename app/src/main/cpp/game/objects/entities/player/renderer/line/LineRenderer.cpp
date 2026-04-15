@@ -11,6 +11,7 @@ void LineRenderer::init() {
     if (!OpenglUtils::createProgram(shaderProgram, shaders.vertexShader.c_str(),
                                     shaders.fragmentShader.c_str())) { return; }
     uniforms.u_camera = glGetUniformLocation(shaderProgram, "u_camera");
+    uniforms.u_ratio  = glGetUniformLocation(shaderProgram, "u_ratio");
     initData();
 }
 
@@ -57,6 +58,7 @@ void LineRenderer::updateData() {
 
     auto cam = getCameraPosition();
     glUniform2f(uniforms.u_camera, cam.x, cam.y);
+    glUniform1f(uniforms.u_ratio, ratio);
 }
 
 void LineRenderer::destroy() {
@@ -65,4 +67,11 @@ void LineRenderer::destroy() {
     glDeleteVertexArrays(1, &vao);
     glDeleteBuffers(1, &vbo);
     glDeleteProgram(shaderProgram);
+}
+
+void LineRenderer::setRatio(float r) {
+    ratio = r;
+    glUseProgram(shaderProgram);
+    glUniform1f(uniforms.u_ratio, ratio);
+    glUseProgram(0);
 }
