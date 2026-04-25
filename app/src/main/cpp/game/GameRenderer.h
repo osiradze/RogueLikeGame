@@ -32,7 +32,7 @@ private:
     std::unique_ptr<Camera> camera;
     std::unique_ptr<SSBOReader> reader;
 
-    int readInterval = 2; // read every Nth frame
+    int readInterval = 20; // read every Nth frame
     int frameCount   = 0;
 
     float bulletTimer    = 0.0f;

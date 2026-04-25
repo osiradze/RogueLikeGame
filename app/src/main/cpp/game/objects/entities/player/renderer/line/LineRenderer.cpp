@@ -35,7 +35,7 @@ void LineRenderer::draw() {
     glUseProgram(shaderProgram);
     updateData();
     glBindVertexArray(vao);
-    glDrawArrays(GL_LINES, 0, 2);
+    //glDrawArrays(GL_LINES, 0, 2);
     glBindVertexArray(0);
     glUseProgram(0);
 }

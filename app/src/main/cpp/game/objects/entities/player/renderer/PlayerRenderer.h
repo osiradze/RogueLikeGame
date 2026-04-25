@@ -38,4 +38,6 @@ private:
     void initUniforms();
     void initData();
     void updateUniforms();
+    void drawGlow();
+    void drawPlayer();
 };
